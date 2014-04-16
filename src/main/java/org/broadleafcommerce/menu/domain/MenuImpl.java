@@ -25,6 +25,7 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTy
 import org.broadleafcommerce.common.i18n.domain.TranslatedEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
+import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationCollection;
 import org.broadleafcommerce.common.presentation.client.AddMethodType;
 import org.hibernate.annotations.BatchSize;
@@ -51,6 +52,7 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "BLC_CMS_MENU")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
+@AdminPresentationClass(friendlyName = "MenuImpl")
 @DirectCopyTransform({
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX, skipOverlaps = true),
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_SITE)
@@ -75,23 +77,12 @@ public class MenuImpl implements Menu {
     @Column(name = "MENU_ID")
     protected Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     @AdminPresentation(friendlyName = "MenuImpl_Name",
             order = Presentation.FieldOrder.NAME,
             gridOrder = Presentation.FieldOrder.NAME,
             prominent = true)
     protected String name;
-
-    @Column(name = "LABEL")
-    @AdminPresentation(friendlyName = "MenuImpl_Label",
-            order = Presentation.FieldOrder.LABEL,
-            translatable = true)
-    protected String label;
-
-    @Column(name = "ACTION_URL")
-    @AdminPresentation(friendlyName = "MenuImpl_ActionUrl",
-            order = Presentation.FieldOrder.ACTION_URL)
-    protected String actionUrl;
 
     @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = { CascadeType.ALL }, orphanRemoval = true)
     @AdminPresentationCollection(friendlyName = "MenuItemImpl_MenuItems",
@@ -119,31 +110,6 @@ public class MenuImpl implements Menu {
     @Override
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String getLabel() {
-        String returnVal = DynamicTranslationProvider.getValue(this, "label", label);
-        if (returnVal == null) {
-            return getName();
-        } else {
-            return returnVal;
-        }
-    }
-
-    @Override
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Override
-    public String getActionUrl() {
-        return actionUrl;
-    }
-
-    @Override
-    public void setActionUrl(String actionUrl) {
-        this.actionUrl = actionUrl;
     }
 
     @Override
@@ -175,9 +141,7 @@ public class MenuImpl implements Menu {
 
             // General Fields
             public static final int NAME = 1000;
-            public static final int LABEL = 3000;
-            public static final int ACTION_URL = 4000;
-            public static final int MENU_ITEMS = 5000;
+            public static final int MENU_ITEMS = 3000;
         }
     }
 }

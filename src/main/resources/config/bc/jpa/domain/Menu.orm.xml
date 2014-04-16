@@ -25,7 +25,7 @@
 
     <named-query name="BC_READ_MENU_BY_NAME" >
         <query>SELECT menu
-            FROM com.broadleafcommerce.advancedcms.domain.menu.Menu menu
+            FROM org.broadleafcommerce.menu.domain.Menu menu
             WHERE (menu.name = :menuName)
         </query>
     </named-query>

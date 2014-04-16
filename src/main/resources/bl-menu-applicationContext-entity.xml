@@ -24,7 +24,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
     <!--  Bean Ids (for translation support) -->
-    <bean id="com.broadleafcommerce.advancedcms.domain.menu.Menu" class="com.broadleafcommerce.advancedcms.domain.menu.MenuImpl" scope="prototype" />
-    <bean id="com.broadleafcommerce.advancedcms.domain.menu.MenuItem" class="com.broadleafcommerce.advancedcms.domain.menu.MenuItemImpl" scope="prototype" />
+    <bean id="org.broadleafcommerce.menu.domain.Menu" class="org.broadleafcommerce.menu.domain.MenuImpl" scope="prototype" />
+    <bean id="org.broadleafcommerce.menu.domain.MenuItem" class="org.broadleafcommerce.menu.domain.MenuItemImpl" scope="prototype" />
 
 </beans>

@@ -27,8 +27,8 @@
     <persistence-unit name="blPU" transaction-type="RESOURCE_LOCAL">
         <mapping-file>config/bc/jpa/domain/Menu.orm.xml</mapping-file>
                 
-        <class>com.broadleafcommerce.advancedcms.domain.menu.MenuImpl</class>
-        <class>com.broadleafcommerce.advancedcms.domain.menu.MenuItemImpl</class>
+        <class>org.broadleafcommerce.menu.domain.MenuImpl</class>
+        <class>org.broadleafcommerce.menu.domain.MenuItemImpl</class>
         <exclude-unlisted-classes/>
     </persistence-unit>
 </persistence>

@@ -20,6 +20,7 @@
 package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.core.catalog.domain.Category;
+import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import java.io.Serializable;
 
@@ -85,6 +86,18 @@ public interface MenuItem extends Serializable {
     void setActionUrl(String actionUrl);
 
     /**
+     * For items of type {@link MenuItemType#IMAGE}, gets the URL of the Image for this Menu Item
+     * @return
+     */
+    String getImageUrl();
+
+    /**
+     * For items of type {@link MenuItemType#IMAGE}, sets the URL of the Image for this Menu Item
+     * @param imageUrl
+     */
+    void setImageUrl(String imageUrl);
+
+    /**
      * Returns the {@link Menu} to which this menuItem belongs
      * @return
      */
@@ -107,6 +120,18 @@ public interface MenuItem extends Serializable {
      * @return
      */
     void setLinkedCategory(Category linkedCategory);
+
+    /**
+     * For items of type {@link MenuItemType#PRODUCT}, stores the associated product.
+     * @return
+     */
+    Product getLinkedProduct();
+
+    /**
+     * For items of type {@link MenuItemType#PRODUCT}, returns the associated product.
+     * @return
+     */
+    void setLinkedProduct(Product linkedProduct);
 
     /**
      * The menu represented by this MenuItem.   (Allows for nested menus).

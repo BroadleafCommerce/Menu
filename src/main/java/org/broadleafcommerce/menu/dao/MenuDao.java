@@ -26,4 +26,6 @@ public interface MenuDao {
     public Menu readMenuById(Long menuId);
 
     public Menu readMenuByName(String menuName);
+
+    public Menu saveMenu(Menu menu);
 }

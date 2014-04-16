@@ -56,4 +56,9 @@ public class MenuDaoImpl implements MenuDao {
             return null;
         }
     }
+
+    @Override
+    public Menu saveMenu(Menu menu) {
+        return em.merge(menu);
+    }
 }

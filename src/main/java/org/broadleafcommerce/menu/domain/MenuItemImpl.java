@@ -24,11 +24,14 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMe
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
+import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.CategoryImpl;
+import org.broadleafcommerce.core.catalog.domain.Product;
+import org.broadleafcommerce.core.catalog.domain.ProductImpl;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -50,6 +53,7 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "BLC_CMS_MENU_ITEM")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
+@AdminPresentationClass(friendlyName = "MenuItemImpl")
 @DirectCopyTransform({
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX, skipOverlaps = true),
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_SITE)
@@ -97,6 +101,11 @@ public class MenuItemImpl implements MenuItem {
             order = Presentation.FieldOrder.ACTION_URL)
     protected String actionUrl;
 
+    @Column(name = "IMAGE_URL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_ImageUrl",
+            order = Presentation.FieldOrder.IMAGE_URL)
+    protected String imageUrl;
+
     @Column(name = "SEQUENCE")
     @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
     protected Long sequence;
@@ -111,6 +120,13 @@ public class MenuItemImpl implements MenuItem {
             order = Presentation.FieldOrder.CATEGORY)
     @AdminPresentationToOneLookup()
     protected Category linkedCategory = new CategoryImpl();
+
+    @ManyToOne(targetEntity = ProductImpl.class)
+    @JoinColumn(name = "PRODUCT_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Product",
+            order = Presentation.FieldOrder.PRODUCT)
+    @AdminPresentationToOneLookup()
+    protected Product linkedProduct = new ProductImpl();
 
     @ManyToOne(targetEntity = MenuImpl.class)
     @JoinColumn(name = "LINKED_MENU_ID")
@@ -175,6 +191,16 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    @Override
     public Long getSequence() {
         return sequence;
     }
@@ -202,6 +228,16 @@ public class MenuItemImpl implements MenuItem {
     @Override
     public void setLinkedCategory(Category linkedCategory) {
         this.linkedCategory = linkedCategory;
+    }
+
+    @Override
+    public Product getLinkedProduct() {
+        return linkedProduct;
+    }
+
+    @Override
+    public void setLinkedProduct(Product linkedProduct) {
+        this.linkedProduct = linkedProduct;
     }
 
     @Override
@@ -234,10 +270,10 @@ public class MenuItemImpl implements MenuItem {
             public static final int MENU_ITEM_TYPE = 2000;
             public static final int LABEL = 3000;
             public static final int ACTION_URL = 4000;
-            public static final int LINKED_MENU = 5000;
-            public static final int CATEGORY = 5000;
-            public static final int PAGE = 5000;
-
+            public static final int IMAGE_URL = 5000;
+            public static final int LINKED_MENU = 6000;
+            public static final int CATEGORY = 7000;
+            public static final int PRODUCT = 8000;
         }
     }
 

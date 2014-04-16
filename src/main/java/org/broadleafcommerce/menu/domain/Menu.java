@@ -57,29 +57,6 @@ public interface Menu extends Serializable {
     void setName(String name);
 
     /**
-     * The value to show for this menu item when displayed on a site.
-     */
-    String getLabel();
-
-    /**
-     * Sets the value for this menu item to display on a site.
-     * @param label
-     */
-    void setLabel(String label);
-
-    /**
-     * Returns the URL (if applicable) that should be targeted when this menu is clicked.
-     * @return
-     */
-    String getActionUrl();
-
-    /**
-     * Sets the URL to go to if this menu is clicked.
-     * @param actionUrl
-     */
-    void setActionUrl(String actionUrl);
-    
-    /**
      * Returns the list of associated {@link MenuItem}s 
      * 
      * @return the featured products
