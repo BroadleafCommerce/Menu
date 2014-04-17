@@ -19,25 +19,6 @@
   #L%
   -->
 
-
-<!--
-  ~ Broadleaf Commerce Confidential
-  ~ _______________________________
-  ~
-  ~ [2009] - [2013] Broadleaf Commerce, LLC
-  ~ All Rights Reserved.
-  ~
-  ~ NOTICE:  All information contained herein is, and remains
-  ~ the property of Broadleaf Commerce, LLC
-  ~ The intellectual and technical concepts contained
-  ~ herein are proprietary to Broadleaf Commerce, LLC
-  ~ and may be covered by U.S. and Foreign Patents,
-  ~ patents in process, and are protected by trade secret or copyright law.
-  ~ Dissemination of this information or reproduction of this material
-  ~ is strictly forbidden unless prior written permission is obtained
-  ~ from Broadleaf Commerce, LLC.
-  -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -52,7 +33,9 @@
         http://schema.broadleafcommerce.org/mo
         http://schema.broadleafcommerce.org/mo/mo-3.0.xsd">
 
-    <import resource="classpath:/bl-menu-applicationContext.xml" />
+    <context:component-scan base-package="org.broadleafcommerce.menu.admin">
+        <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.web.*"/>
+    </context:component-scan>
 
     <bean id="messageSource" class="org.broadleafcommerce.common.util.BroadleafMergeResourceBundleMessageSource">
         <property name="basenames">
@@ -60,6 +43,30 @@
                 <value>classpath:/messages/Menu</value>
             </list>
         </property>
+    </bean>
+
+    <bean id="blMenuJsLocations" class="org.springframework.beans.factory.config.ListFactoryBean" >
+        <property name="sourceList">
+            <list>
+                <value>classpath:/menu/js/</value>
+            </list>
+        </property>
+    </bean>
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMenuJsLocations" />
+        <property name="targetRef" value="blJsLocations" />
+    </bean>
+
+    <bean id="blMenuAdminJsFileList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>admin/menuItem.js</value>
+            </list>
+        </property>
+    </bean>
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMenuAdminJsFileList"/>
+        <property name="targetRef" value="blJsFileList"/>
     </bean>
 
     <bean id="blCustomPersistenceHandlers" class="org.springframework.beans.factory.config.ListFactoryBean" scope="prototype">

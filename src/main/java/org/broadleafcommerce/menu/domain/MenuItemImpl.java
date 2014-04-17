@@ -81,6 +81,12 @@ public class MenuItemImpl implements MenuItem {
             prominent = true)
     protected String name;
 
+    @Column(name = "LABEL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Label",
+            order = Presentation.FieldOrder.LABEL,
+            translatable = true)
+    protected String label;
+
     @Column(name = "MENU_ITEM_TYPE")
     @AdminPresentation(friendlyName = "MenuItemImpl_Type",
             order = Presentation.FieldOrder.MENU_ITEM_TYPE,
@@ -90,11 +96,13 @@ public class MenuItemImpl implements MenuItem {
             broadleafEnumeration = "org.broadleafcommerce.menu.type.MenuItemType")
     protected String type;
 
-    @Column(name = "LABEL")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Label",
-            order = Presentation.FieldOrder.LABEL,
-            translatable = true)
-    protected String label;
+    @Column(name = "SEQUENCE")
+    @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
+    protected Long sequence;
+
+    @ManyToOne(optional = true, targetEntity = MenuImpl.class)
+    @JoinColumn(name = "PARENT_MENU_ID")
+    protected Menu parentMenu;
 
     @Column(name = "ACTION_URL")
     @AdminPresentation(friendlyName = "MenuItemImpl_ActionUrl",
@@ -105,14 +113,6 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentation(friendlyName = "MenuItemImpl_ImageUrl",
             order = Presentation.FieldOrder.IMAGE_URL)
     protected String imageUrl;
-
-    @Column(name = "SEQUENCE")
-    @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
-    protected Long sequence;
-
-    @ManyToOne(optional = true, targetEntity = MenuImpl.class)
-    @JoinColumn(name = "PARENT_MENU_ID")
-    protected Menu parentMenu;
 
     @ManyToOne(targetEntity = CategoryImpl.class)
     @JoinColumn(name = "CATEGORY_ID")
@@ -267,8 +267,8 @@ public class MenuItemImpl implements MenuItem {
 
             // General Fields
             public static final int NAME = 1000;
-            public static final int MENU_ITEM_TYPE = 2000;
-            public static final int LABEL = 3000;
+            public static final int LABEL = 2000;
+            public static final int MENU_ITEM_TYPE = 3000;
             public static final int ACTION_URL = 4000;
             public static final int IMAGE_URL = 5000;
             public static final int LINKED_MENU = 6000;
