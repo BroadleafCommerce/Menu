@@ -54,11 +54,11 @@
 
     <!--  Add New TranslatedEntity Types -->
     <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
-        <constructor-arg index="0" value="com.broadleafcommerce.advancedcms.domain.menu.Menu"/>
+        <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.Menu"/>
         <constructor-arg index="1" value="Menu"/>
     </bean>
     <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
-        <constructor-arg index="0" value="com.broadleafcommerce.advancedcms.domain.menu.MenuItem"/>
+        <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.MenuItem"/>
         <constructor-arg index="1" value="MenuItem"/>
     </bean>
     

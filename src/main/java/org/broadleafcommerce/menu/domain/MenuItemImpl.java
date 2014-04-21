@@ -37,8 +37,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -119,14 +117,14 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentation(friendlyName = "MenuItemImpl_Category",
             order = Presentation.FieldOrder.CATEGORY)
     @AdminPresentationToOneLookup()
-    protected Category linkedCategory = new CategoryImpl();
+    protected Category linkedCategory;
 
     @ManyToOne(targetEntity = ProductImpl.class)
     @JoinColumn(name = "PRODUCT_ID")
     @AdminPresentation(friendlyName = "MenuItemImpl_Product",
             order = Presentation.FieldOrder.PRODUCT)
     @AdminPresentationToOneLookup()
-    protected Product linkedProduct = new ProductImpl();
+    protected Product linkedProduct;
 
     @ManyToOne(targetEntity = MenuImpl.class)
     @JoinColumn(name = "LINKED_MENU_ID")
