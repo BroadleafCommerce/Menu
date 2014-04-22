@@ -20,12 +20,21 @@
 package org.broadleafcommerce.menu.dao;
 
 import org.broadleafcommerce.menu.domain.Menu;
+import org.broadleafcommerce.menu.domain.MenuItem;
+import java.util.List;
 
 public interface MenuDao {
+
+    public List<Menu> readAllMenus();
+
+    public List<MenuItem> readAllMenuItems();
 
     public Menu readMenuById(Long menuId);
 
     public Menu readMenuByName(String menuName);
 
     public Menu saveMenu(Menu menu);
+
+    public MenuItem saveMenuItem(MenuItem menuItem);
+
 }

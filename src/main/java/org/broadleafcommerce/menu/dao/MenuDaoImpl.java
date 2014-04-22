@@ -19,23 +19,36 @@
  */
 package org.broadleafcommerce.menu.dao;
 
+import org.broadleafcommerce.common.util.dao.TypedQueryBuilder;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuImpl;
+import org.broadleafcommerce.menu.domain.MenuItem;
 import org.hibernate.ejb.QueryHints;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 
 @Repository("blMenuDao")
 public class MenuDaoImpl implements MenuDao {
     
     @PersistenceContext(unitName = "blPU")
     protected EntityManager em;
+
+    @Override
+    public List<Menu> readAllMenus() {
+        TypedQuery<Menu> q = new TypedQueryBuilder<Menu>(Menu.class, "m")
+                .toQuery(em);
+        return q.getResultList();
+    }
+
+    @Override
+    public List<MenuItem> readAllMenuItems() {
+        TypedQuery<MenuItem> q = new TypedQueryBuilder<MenuItem>(MenuItem.class, "mi")
+                .toQuery(em);
+        return q.getResultList();
+    }
 
     @Override
     public Menu readMenuById(Long menuId) {
@@ -61,4 +74,10 @@ public class MenuDaoImpl implements MenuDao {
     public Menu saveMenu(Menu menu) {
         return em.merge(menu);
     }
+
+    @Override
+    public MenuItem saveMenuItem(MenuItem menuItem) {
+        return em.merge(menuItem);
+    }
+
 }
