@@ -19,6 +19,7 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import org.broadleafcommerce.common.extensibility.jpa.clone.ClonePolicyCollection;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -91,6 +92,7 @@ public class MenuImpl implements Menu {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
     @BatchSize(size = 50)
     @OrderBy(value = "sequence")
+    @ClonePolicyCollection
     protected List<MenuItem> menuItems = new ArrayList<MenuItem>(20);
 
     @Override

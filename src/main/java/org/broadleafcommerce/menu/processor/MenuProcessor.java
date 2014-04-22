@@ -32,9 +32,10 @@ import javax.annotation.Resource;
 /**
  * A Thymeleaf processor that will add the desired menu to the model. 
  * 
- * It accepts a menuName, menuId, and/or menuItem.    The precedence is that a menuItemId
- * will honored first, followed by a menuId, and finally by the menuName.
- * 
+ * It accepts a menuName or menuId. The precedence is that a menuId
+ * will honored first, followed by a menuName.
+ * An extension manager may override the resulting menu if configured to do so.
+ *
  * @author bpolster
  */
 @Component("blMenuProcessor")
@@ -42,6 +43,9 @@ public class MenuProcessor extends AbstractModelVariableModifierProcessor {
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
+
+    @Resource(name = "blMenuProcessorExtensionManager")
+    protected MenuProcessorExtensionManager extensionManager;
 
     /**
      * Sets the name of this processor to be used in Thymeleaf template
@@ -68,7 +72,7 @@ public class MenuProcessor extends AbstractModelVariableModifierProcessor {
         } else {
             menu = menuService.findMenuByName(menuName);
         }
-
         addToModel(arguments, resultVar, menu);
+        extensionManager.getProxy().addAdditionalFieldsToModel(arguments, element);
     }
 }
