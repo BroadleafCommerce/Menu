@@ -19,9 +19,11 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.menu.type.MenuItemType;
+
 import java.io.Serializable;
 
 
@@ -38,17 +40,6 @@ public interface MenuItem extends Serializable {
      * @param id
      */
     void setId(Long id);
-
-    /**
-     * The value to show for this menu item when displayed on a site.
-     */
-    String getName();
-
-    /**
-     * Sets the value for this menu item to display on a site.
-     * @param label
-     */
-    void setName(String name);
 
     /**
      * The value to show for this menu item when displayed on a site.
@@ -132,6 +123,18 @@ public interface MenuItem extends Serializable {
      * @return
      */
     void setLinkedProduct(Product linkedProduct);
+
+    /**
+     * For items of type {@link MenuItemType#PAGE}, stores the associated page.
+     * @return
+     */
+    Page getLinkedPage();
+
+    /**
+     * For items of type {@link MenuItemType#PAGE}, returns the associated page.
+     * @return
+     */
+    void setLinkedPage(Page linkedPage);
 
     /**
      * The menu represented by this MenuItem.   (Allows for nested menus).

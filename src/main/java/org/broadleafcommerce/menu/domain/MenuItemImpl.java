@@ -19,6 +19,8 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import org.broadleafcommerce.cms.page.domain.Page;
+import org.broadleafcommerce.cms.page.domain.PageImpl;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -37,6 +39,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,8 +57,7 @@ import javax.persistence.Table;
 @AdminPresentationClass(friendlyName = "MenuItemImpl")
 @DirectCopyTransform({
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX, skipOverlaps = true),
-        @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX_PRECLONE_INFORMATION),
-        @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_CATALOG)
+        @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_SITE)
 })
 public class MenuItemImpl implements MenuItem {
 
@@ -73,16 +75,11 @@ public class MenuItemImpl implements MenuItem {
     @Column(name = "MENU_ITEM_ID")
     protected Long id;
 
-    @Column(name = "NAME")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Name",
-            order = Presentation.FieldOrder.NAME,
-            gridOrder = Presentation.FieldOrder.NAME,
-            prominent = true)
-    protected String name;
-
     @Column(name = "LABEL")
     @AdminPresentation(friendlyName = "MenuItemImpl_Label",
             order = Presentation.FieldOrder.LABEL,
+            gridOrder = Presentation.FieldOrder.LABEL,
+            prominent = true,
             translatable = true)
     protected String label;
 
@@ -127,6 +124,13 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentationToOneLookup()
     protected Product linkedProduct;
 
+    @ManyToOne(targetEntity = PageImpl.class)
+    @JoinColumn(name = "PAGE_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Page",
+            order = Presentation.FieldOrder.PAGE)
+    @AdminPresentationToOneLookup()
+    protected Page linkedPage;
+
     @ManyToOne(targetEntity = MenuImpl.class)
     @JoinColumn(name = "LINKED_MENU_ID")
     @AdminPresentation(friendlyName = "MenuItemImpl_LinkedMenu",
@@ -145,16 +149,6 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
     public MenuItemType getMenuItemType() {
         return MenuItemType.getInstance(type);
     }
@@ -166,12 +160,7 @@ public class MenuItemImpl implements MenuItem {
 
     @Override
     public String getLabel() {
-        String returnVal = DynamicTranslationProvider.getValue(this, "label", label);
-        if (returnVal == null) {
-            return getName();
-        } else {
-            return returnVal;
-        }
+        return DynamicTranslationProvider.getValue(this, "label", label);
     }
 
     @Override
@@ -240,6 +229,16 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
+    public Page getLinkedPage() {
+        return linkedPage;
+    }
+
+    @Override
+    public void setLinkedPage(Page linkedPage) {
+        this.linkedPage = linkedPage;
+    }
+
+    @Override
     public Menu getLinkedMenu() {
         return linkedMenu;
     }
@@ -265,7 +264,6 @@ public class MenuItemImpl implements MenuItem {
         public static class FieldOrder {
 
             // General Fields
-            public static final int NAME = 1000;
             public static final int LABEL = 2000;
             public static final int MENU_ITEM_TYPE = 3000;
             public static final int ACTION_URL = 4000;
@@ -273,6 +271,7 @@ public class MenuItemImpl implements MenuItem {
             public static final int LINKED_MENU = 6000;
             public static final int CATEGORY = 7000;
             public static final int PRODUCT = 8000;
+            public static final int PAGE = 9000;
         }
     }
 

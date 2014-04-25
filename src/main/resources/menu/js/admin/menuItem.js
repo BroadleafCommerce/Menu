@@ -43,6 +43,7 @@
             var $linkedMenu       = $form.find('#field-linkedMenu');
             var $linkedCategory   = $form.find('#field-linkedCategory');
             var $linkedProduct    = $form.find('#field-linkedProduct');
+            var $linkedPage       = $form.find('#field-linkedPage');
 
             // Hide everything
             $actionUrl.addClass('hidden');
@@ -50,6 +51,7 @@
             $linkedMenu.addClass('hidden');
             $linkedCategory.addClass('hidden');
             $linkedProduct.addClass('hidden');
+            $linkedPage.addClass('hidden');
 
             switch (menuItemType) {
                 case "LINK":
@@ -64,6 +66,9 @@
                 case "PRODUCT":
                     $linkedProduct.removeClass('hidden');
                     break;
+                case "PAGE":
+                    $linkedPage.removeClass('hidden');
+                    break;                    
                 case "IMAGE":
                     $actionUrl.removeClass('hidden');
                     $imageUrl.removeClass('hidden');
