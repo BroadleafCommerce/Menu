@@ -36,25 +36,25 @@ public interface Menu extends Serializable {
      * Internal id of the menu.
      * @return
      */
-    Long getId();
+    public Long getId();
 
     /**
      * Sets the id of the menu.
      * @param id
      */
-    void setId(Long id);
+    public void setId(Long id);
 
     /**
      * Returns the name of the menu.
      * @return
      */
-    String getName();
+    public String getName();
 
     /**
      * Sets the name of the menu.
      * @param name
      */
-    void setName(String name);
+    public void setName(String name);
 
     /**
      * Returns the list of associated {@link MenuItem}s 

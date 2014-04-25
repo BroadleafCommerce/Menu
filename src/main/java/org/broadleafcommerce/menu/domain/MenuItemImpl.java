@@ -39,7 +39,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
+import org.hibernate.annotations.Type;
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -92,9 +94,9 @@ public class MenuItemImpl implements MenuItem {
             broadleafEnumeration = "org.broadleafcommerce.menu.type.MenuItemType")
     protected String type;
 
-    @Column(name = "SEQUENCE")
+    @Column(name = "SEQUENCE", precision = 10, scale = 6)
     @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
-    protected Long sequence;
+    protected BigDecimal sequence;
 
     @ManyToOne(optional = true, targetEntity = MenuImpl.class)
     @JoinColumn(name = "PARENT_MENU_ID")
@@ -110,6 +112,11 @@ public class MenuItemImpl implements MenuItem {
             order = Presentation.FieldOrder.IMAGE_URL)
     protected String imageUrl;
 
+    @Column(name = "ALT_TEXT")
+    @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
+            order = Presentation.FieldOrder.ALT_TEXT)
+    protected String altText;
+
     @ManyToOne(targetEntity = CategoryImpl.class)
     @JoinColumn(name = "CATEGORY_ID")
     @AdminPresentation(friendlyName = "MenuItemImpl_Category",
@@ -124,19 +131,28 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentationToOneLookup()
     protected Product linkedProduct;
 
-    @ManyToOne(targetEntity = PageImpl.class)
-    @JoinColumn(name = "PAGE_ID")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Page",
-            order = Presentation.FieldOrder.PAGE)
-    @AdminPresentationToOneLookup()
-    protected Page linkedPage;
-
     @ManyToOne(targetEntity = MenuImpl.class)
     @JoinColumn(name = "LINKED_MENU_ID")
     @AdminPresentation(friendlyName = "MenuItemImpl_LinkedMenu",
             order = Presentation.FieldOrder.LINKED_MENU)
     @AdminPresentationToOneLookup()
     protected Menu linkedMenu;
+
+    @ManyToOne(targetEntity = PageImpl.class)
+    @JoinColumn(name = "LINKED_PAGE_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_LinkedPage",
+            order = Presentation.FieldOrder.LINKED_PAGE)
+    @AdminPresentationToOneLookup()
+    protected Page linkedPage;
+
+    @Lob
+    @Type(type = "org.hibernate.type.StringClobType")
+    @Column(name = "CUSTOM_HTML", length = Integer.MAX_VALUE - 1)
+    @AdminPresentation(friendlyName = "MenuItemImpl_CustomHtml", order = Presentation.FieldOrder.CUSTOM_HTML,
+            largeEntry = true,
+            fieldType = SupportedFieldType.HTML_BASIC,
+            translatable = true)
+    protected String customHtml;
 
     @Override
     public Long getId() {
@@ -189,12 +205,12 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public Long getSequence() {
+    public BigDecimal getSequence() {
         return sequence;
     }
 
     @Override
-    public void setSequence(Long sequence) {
+    public void setSequence(BigDecimal sequence) {
         this.sequence = sequence;
     }
 
@@ -229,6 +245,26 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
+    public Menu getLinkedMenu() {
+        return linkedMenu;
+    }
+
+    @Override
+    public void setLinkedMenu(Menu linkedMenu) {
+        this.linkedMenu = linkedMenu;
+    }
+
+    @Override
+    public String getAltText() {
+        return altText;
+    }
+
+    @Override
+    public void setAltText(String altText) {
+        this.altText = altText;
+    }
+
+    @Override
     public Page getLinkedPage() {
         return linkedPage;
     }
@@ -239,39 +275,30 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public Menu getLinkedMenu() {
-        return linkedMenu;
+    public String getCustomHtml() {
+        return DynamicTranslationProvider.getValue(this, "customHtml", customHtml);
     }
 
     @Override
-    public void setLinkedMenu(Menu linkedMenu) {
-        this.linkedMenu = linkedMenu;
+    public void setCustomHtml(String customHtml) {
+        this.customHtml = customHtml;
     }
 
     public static class Presentation {
 
-        public static class Tab {
-
-            public static class Name {
-                public static final String Advanced = "MenuItemImpl_Advanced_Tab";
-            }
-
-            public static class Order {
-                public static final int Advanced = 3000;
-            }
-        }
-
         public static class FieldOrder {
 
             // General Fields
-            public static final int LABEL = 2000;
-            public static final int MENU_ITEM_TYPE = 3000;
-            public static final int ACTION_URL = 4000;
-            public static final int IMAGE_URL = 5000;
+            public static final int LABEL = 1000;
+            public static final int MENU_ITEM_TYPE = 2000;
+            public static final int ACTION_URL = 3000;
+            public static final int IMAGE_URL = 4000;
+            public static final int ALT_TEXT = 5000;
             public static final int LINKED_MENU = 6000;
-            public static final int CATEGORY = 7000;
-            public static final int PRODUCT = 8000;
-            public static final int PAGE = 9000;
+            public static final int LINKED_PAGE = 7000;
+            public static final int CATEGORY =8000;
+            public static final int PRODUCT = 9000;
+            public static final int CUSTOM_HTML = 10000;
         }
     }
 

@@ -38,10 +38,11 @@ public class MenuItemType implements Serializable {
 
     public static final MenuItemType LINK = new MenuItemType("LINK", "Link");
     public static final MenuItemType CATEGORY = new MenuItemType("CATEGORY", "Category");
+    public static final MenuItemType PAGE = new MenuItemType("PAGE", "Page");
     public static final MenuItemType SUBMENU = new MenuItemType("SUBMENU", "Sub Menu");
     public static final MenuItemType PRODUCT = new MenuItemType("PRODUCT", "Product");
-    public static final MenuItemType PAGE = new MenuItemType("PAGE", "Page");
-    public static final MenuItemType IMAGE = new MenuItemType("IMAGE", "Image");
+    public static final MenuItemType CUSTOM = new MenuItemType("CUSTOM", "Custom");
+
 
     public static MenuItemType getInstance(final String type) {
         return TYPES.get(type);

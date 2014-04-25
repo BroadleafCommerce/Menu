@@ -34,10 +34,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -124,31 +122,18 @@ public class MenuImpl implements Menu, AdminMainEntity {
         this.menuItems = menuItems;
     }
 
-    public static class Presentation {
-
-        public static class Tab {
-
-            public static class Name {
-
-                public static final String Advanced = "MenuImpl_Advanced_Tab";
-            }
-
-            public static class Order {
-
-                public static final int Advanced = 2000;
-            }
-        }
-
-        public static class FieldOrder {
-
-            // General Fields
-            public static final int NAME = 1000;
-            public static final int MENU_ITEMS = 3000;
-        }
-    }
-
     @Override
     public String getMainEntityName() {
         return getName();
     }
+
+    public static class Presentation {
+
+        public static class FieldOrder {
+            // General Fields
+            public static final int NAME = 1000;
+        }
+
+    }
+
 }

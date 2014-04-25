@@ -23,8 +23,8 @@ import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.menu.type.MenuItemType;
-
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 public interface MenuItem extends Serializable {
@@ -33,131 +33,155 @@ public interface MenuItem extends Serializable {
      * Id of this menuItem
      * @return
      */
-    Long getId();
+    public Long getId();
 
     /**
      * Sets the id of this menuItem.
      * @param id
      */
-    void setId(Long id);
+    public void setId(Long id);
 
     /**
      * The value to show for this menu item when displayed on a site.
      */
-    String getLabel();
+    public String getLabel();
 
     /**
      * Sets the value for this menu item to display on a site.
      * @param label
      */
-    void setLabel(String label);
+    public void setLabel(String label);
 
     /**
      * Returns the {@link MenuItemType}
      * @return
      */
-    MenuItemType getMenuItemType();
+    public MenuItemType getMenuItemType();
 
     /**
      * Sets the {@link MenuItemType} 
      * @param menuItemType
      */
-    void setMenuItemType(MenuItemType menuItemType);
+    public void setMenuItemType(MenuItemType menuItemType);
 
     /**
      * Returns the URL (if applicable) that should be targeted when this menu is clicked.
      * @return
      */
-    String getActionUrl();
+    public String getActionUrl();
 
     /**
      * Sets the URL to go to if this menu is clicked.
      * @param actionUrl
      */
-    void setActionUrl(String actionUrl);
+    public void setActionUrl(String actionUrl);
 
     /**
      * For items of type {@link MenuItemType#IMAGE}, gets the URL of the Image for this Menu Item
      * @return
      */
-    String getImageUrl();
+    public String getImageUrl();
 
     /**
      * For items of type {@link MenuItemType#IMAGE}, sets the URL of the Image for this Menu Item
      * @param imageUrl
      */
-    void setImageUrl(String imageUrl);
+    public void setImageUrl(String imageUrl);
 
     /**
      * Returns the {@link Menu} to which this menuItem belongs
      * @return
      */
-    Menu getParentMenu();
+    public Menu getParentMenu();
 
     /**
      * Sets the {@link Menu} to which this menuItem belongs
      * @param menu
      */
-    void setParentMenu(Menu menu);
+    public void setParentMenu(Menu menu);
     
     /**
      * For items of type {@link MenuItemType#CATEGORY}, stores the associated category.
      * @return
      */
-    Category getLinkedCategory();
+    public Category getLinkedCategory();
 
     /**
      * For items of type {@link MenuItemType#CATEGORY}, returns the associated category.
      * @return
      */
-    void setLinkedCategory(Category linkedCategory);
+    public void setLinkedCategory(Category linkedCategory);
 
     /**
      * For items of type {@link MenuItemType#PRODUCT}, stores the associated product.
      * @return
      */
-    Product getLinkedProduct();
+    public Product getLinkedProduct();
 
     /**
      * For items of type {@link MenuItemType#PRODUCT}, returns the associated product.
      * @return
      */
-    void setLinkedProduct(Product linkedProduct);
+    public void setLinkedProduct(Product linkedProduct);
 
-    /**
-     * For items of type {@link MenuItemType#PAGE}, stores the associated page.
-     * @return
-     */
-    Page getLinkedPage();
-
-    /**
-     * For items of type {@link MenuItemType#PAGE}, returns the associated page.
-     * @return
-     */
-    void setLinkedPage(Page linkedPage);
 
     /**
      * The menu represented by this MenuItem.   (Allows for nested menus).
      * @return
      */
-    Menu getLinkedMenu();
+    public Menu getLinkedMenu();
 
     /**
      * Sets the linked menu.
      * @param menu
      */
-    void setLinkedMenu(Menu menu);
+    public void setLinkedMenu(Menu menu);
 
     /**
      * Sets the order of this MenuItem in the {@link #getParentMenu()}
      * @param sequence
      */
-    void setSequence(Long sequence);
+    public void setSequence(BigDecimal sequence);
 
     /**
      * Returns the order of this MenuItem in the {@link #getParentMenu()}
      * @return
      */
-    Long getSequence();
+    public BigDecimal getSequence();
 
+    /**
+     * For items of type {@link MenuItemType#LINK}, gets the alt text for the anchor.
+     * @return
+     */
+    public String getAltText();
+
+    /**
+     * For items of type {@link MenuItemType#LINK}, stores the alt text for the anchor.
+     * @return
+     */
+    public void setAltText(String altText);
+
+    /**
+     * For items of type {@link MenuItemType#PAGE}, returns the associated page.
+     * @return
+     */
+    public Page getLinkedPage();
+
+    /**
+     * For items of type {@link MenuItemType#PAGE}, sets the associated page.
+     * @return
+     */
+    public void setLinkedPage(Page linkedPage);
+
+    /**
+     * For items of type {@link MenuItemType#CUSTOM}, returns the associated custom HTML.
+     * @return
+     */
+    public String getCustomHtml();
+
+    /**
+     * For items of type {@link MenuItemType#CUSTOM}, sets the associated custom HTML.
+     * @return
+     */
+    public void setCustomHtml(String customHtml);
 }

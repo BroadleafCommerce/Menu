@@ -40,23 +40,24 @@
             // Initialize relevant fields
             var $actionUrl        = $form.find('#field-actionUrl');
             var $imageUrl         = $form.find('#field-imageUrl');
+            var $altText          = $form.find('#field-altText');
             var $linkedMenu       = $form.find('#field-linkedMenu');
             var $linkedCategory   = $form.find('#field-linkedCategory');
             var $linkedProduct    = $form.find('#field-linkedProduct');
             var $linkedPage       = $form.find('#field-linkedPage');
+            var $customHtml       = $form.find('#field-customHtml');
 
             // Hide everything
             $actionUrl.addClass('hidden');
             $imageUrl.addClass('hidden');
+            $altText.addClass('hidden');
             $linkedMenu.addClass('hidden');
             $linkedCategory.addClass('hidden');
             $linkedProduct.addClass('hidden');
             $linkedPage.addClass('hidden');
+            $customHtml.addClass('hidden');
 
             switch (menuItemType) {
-                case "LINK":
-                    $actionUrl.removeClass('hidden');
-                    break;
                 case "CATEGORY":
                     $linkedCategory.removeClass('hidden');
                     break;
@@ -68,10 +69,14 @@
                     break;
                 case "PAGE":
                     $linkedPage.removeClass('hidden');
-                    break;                    
-                case "IMAGE":
+                    break;
+                case "LINK":
                     $actionUrl.removeClass('hidden');
                     $imageUrl.removeClass('hidden');
+                    $altText.removeClass('hidden');
+                    break;
+                case "CUSTOM":
+                    $customHtml.removeClass('hidden');
                     break;
             }
         }
