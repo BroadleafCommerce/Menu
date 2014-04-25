@@ -19,6 +19,7 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import org.broadleafcommerce.common.admin.domain.AdminMainEntity;
 import org.broadleafcommerce.common.extensibility.jpa.clone.ClonePolicyCollection;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
@@ -57,7 +58,7 @@ import javax.persistence.Table;
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX, skipOverlaps = true),
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_SITE)
 })
-public class MenuImpl implements Menu {
+public class MenuImpl implements Menu, AdminMainEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -144,5 +145,10 @@ public class MenuImpl implements Menu {
             public static final int NAME = 1000;
             public static final int MENU_ITEMS = 3000;
         }
+    }
+
+    @Override
+    public String getMainEntityName() {
+        return getName();
     }
 }
