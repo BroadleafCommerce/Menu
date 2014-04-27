@@ -84,8 +84,8 @@ public class MenuVariableExpression implements BroadleafVariableExpression {
                 List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
                 for (CategoryXref xref : categoryXrefs) {
                     MenuItemDTO dto = new MenuItemDTO();
-                    dto.setLabel(xref.getCategory().getName());
-                    dto.setUrl(xref.getCategory().getUrl());
+                    dto.setLabel(xref.getSubCategory().getName());
+                    dto.setUrl(xref.getSubCategory().getUrl());
                     dtos.add(dto);
                 }
                 return dtos;
