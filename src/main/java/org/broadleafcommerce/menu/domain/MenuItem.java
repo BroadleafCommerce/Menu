@@ -43,6 +43,8 @@ public interface MenuItem extends Serializable {
 
     /**
      * The value to show for this menu item when displayed on a site.
+     * Will return the configured Label, unless of type {@link MenuItemType#PRODUCT}, or {@link MenuItemType#CATEGORY},
+     * or {@link MenuItemType#SUBMENU} which will return the corresponding linked name.
      */
     public String getLabel();
 
@@ -184,4 +186,14 @@ public interface MenuItem extends Serializable {
      * @return
      */
     public void setCustomHtml(String customHtml);
+
+    /**
+     * Convenience method that returns an anchor URL based on the configured MenuItemType.
+     * Will return getActionUrl() unless type is {@link MenuItemType#PAGE},
+     * {@link MenuItemType#PRODUCT}, or {@link MenuItemType#CATEGORY} and will use corresponding linked URL.
+     *
+     * @return
+     */
+    public String getUrl();
+
 }

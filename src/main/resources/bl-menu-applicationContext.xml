@@ -34,7 +34,6 @@
     <!-- Scan the module -->
     <context:component-scan base-package="org.broadleafcommerce.menu">
         <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.*"/>
-        <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.web.*"/>
     </context:component-scan>
     
     <!-- Thymeleaf Config -->
@@ -60,6 +59,14 @@
     <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
         <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.MenuItem"/>
         <constructor-arg index="1" value="MenuItem"/>
+    </bean>
+
+    <bean id="blVariableExpressions" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <ref bean="blMenuVariableExpression" />
+            </list>
+        </property>
     </bean>
     
     <!-- Generic Configuration -->
