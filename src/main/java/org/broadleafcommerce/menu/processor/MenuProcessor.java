@@ -30,7 +30,7 @@ import org.thymeleaf.dom.Element;
 import javax.annotation.Resource;
 
 /**
- * A Thymeleaf processor that will add the desired menu to the model. 
+ * A Thymeleaf processor that will add a list of MenuItemDTOs to the model.
  * 
  * It accepts a menuName or menuId. The precedence is that a menuId
  * will honored first, followed by a menuName.
@@ -72,7 +72,11 @@ public class MenuProcessor extends AbstractModelVariableModifierProcessor {
         } else {
             menu = menuService.findMenuByName(menuName);
         }
-        addToModel(arguments, resultVar, menu);
-        extensionManager.getProxy().addAdditionalFieldsToModel(arguments, element);
+
+        if (menu != null) {
+            addToModel(arguments, resultVar, menuService.constructMenuItemDTOsForMenu(menu));
+            extensionManager.getProxy().addAdditionalFieldsToModel(arguments, element);
+        }
+
     }
 }

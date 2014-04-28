@@ -60,14 +60,6 @@
         <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.MenuItem"/>
         <constructor-arg index="1" value="MenuItem"/>
     </bean>
-
-    <bean id="blVariableExpressions" class="org.springframework.beans.factory.config.ListFactoryBean">
-        <property name="sourceList">
-            <list>
-                <ref bean="blMenuVariableExpression" />
-            </list>
-        </property>
-    </bean>
     
     <!-- Generic Configuration -->
     <bean id="blConfiguration" class="org.broadleafcommerce.common.config.RuntimeEnvironmentPropertiesConfigurer">

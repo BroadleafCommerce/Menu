@@ -20,16 +20,25 @@
 
 package org.broadleafcommerce.menu.dto;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A Generic DTO object that represents the information to display a Menu Item.
  * Can be used on the front end as a way to easily iterate and display menu items of different types.
  *
  * @author Elbert Bautista (elbertbautista)
  */
-public class MenuItemDTO {
+public class MenuItemDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     protected String label;
     protected String url;
+    protected String imageUrl;
+    protected String altText;
+    protected List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
 
     public String getLabel() {
         return label;
@@ -45,6 +54,30 @@ public class MenuItemDTO {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getAltText() {
+        return altText;
+    }
+
+    public void setAltText(String altText) {
+        this.altText = altText;
+    }
+
+    public List<MenuItemDTO> getSubmenu() {
+        return submenu;
+    }
+
+    public void setSubmenu(List<MenuItemDTO> submenu) {
+        this.submenu = submenu;
     }
 
 }
