@@ -60,5 +60,18 @@ public class AdminMenuController extends AdminBasicEntityController {
         return view;
     }
 
+    @Override
+    @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.GET)
+    public String showUpdateCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
+                                           @PathVariable  Map<String, String> pathVars,
+                                           @PathVariable(value="id") String id,
+                                           @PathVariable(value="collectionField") String collectionField,
+                                           @PathVariable(value="collectionItemId") String collectionItemId) throws Exception {
+        String view = super.showUpdateCollectionItem(request, response, model, pathVars, id, collectionField, collectionItemId);
+        model.addAttribute("additionalControllerClasses", "menu-item-form");
+
+        return view;
+    }
+
 
 }

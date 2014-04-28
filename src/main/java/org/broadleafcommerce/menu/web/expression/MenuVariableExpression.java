@@ -46,7 +46,7 @@ public class MenuVariableExpression implements BroadleafVariableExpression {
      * Utility method to determine if the passed in menu item has an image
      * @return
      */    public boolean hasImage(MenuItem menuItem) {
-        return MenuItemType.LINK.equals(menuItem.getMenuItemType()) && menuItem.getImageUrl() != null;
+        return MenuItemType.LINK.equals(menuItem.getMenuItemType()) && menuItem.getImage() != null;
     }
 
     /**

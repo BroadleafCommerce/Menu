@@ -39,7 +39,7 @@
 
             // Initialize relevant fields
             var $actionUrl        = $form.find('#field-actionUrl');
-            var $imageUrl         = $form.find('#field-imageUrl');
+            var $image            = $form.find('#field-image');
             var $altText          = $form.find('#field-altText');
             var $linkedMenu       = $form.find('#field-linkedMenu');
             var $linkedCategory   = $form.find('#field-linkedCategory');
@@ -49,7 +49,7 @@
 
             // Hide everything
             $actionUrl.addClass('hidden');
-            $imageUrl.addClass('hidden');
+            $image.addClass('hidden');
             $altText.addClass('hidden');
             $linkedMenu.addClass('hidden');
             $linkedCategory.addClass('hidden');
@@ -72,7 +72,7 @@
                     break;
                 case "LINK":
                     $actionUrl.removeClass('hidden');
-                    $imageUrl.removeClass('hidden');
+                    $image.removeClass('hidden');
                     $altText.removeClass('hidden');
                     break;
                 case "CUSTOM":
