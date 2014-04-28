@@ -25,6 +25,8 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
+import org.broadleafcommerce.common.media.domain.Media;
+import org.broadleafcommerce.common.media.domain.MediaImpl;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
@@ -107,10 +109,12 @@ public class MenuItemImpl implements MenuItem {
             order = Presentation.FieldOrder.ACTION_URL)
     protected String actionUrl;
 
-    @Column(name = "IMAGE_URL")
-    @AdminPresentation(friendlyName = "MenuItemImpl_ImageUrl",
+    @ManyToOne(targetEntity = MediaImpl.class)
+    @JoinColumn(name = "MEDIA_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Image",
+            fieldType = SupportedFieldType.MEDIA,
             order = Presentation.FieldOrder.IMAGE_URL)
-    protected String imageUrl;
+    protected Media image;
 
     @Column(name = "ALT_TEXT")
     @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
@@ -208,13 +212,13 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public String getImageUrl() {
-        return imageUrl;
+    public Media getImage() {
+        return image;
     }
 
     @Override
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(Media image) {
+        this.image = image;
     }
 
     @Override

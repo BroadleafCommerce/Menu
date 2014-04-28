@@ -20,6 +20,7 @@
 package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
+import org.broadleafcommerce.common.media.domain.Media;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.menu.type.MenuItemType;
@@ -82,13 +83,13 @@ public interface MenuItem extends Serializable {
      * For items of type {@link MenuItemType#IMAGE}, gets the URL of the Image for this Menu Item
      * @return
      */
-    public String getImageUrl();
+    Media getImage();
 
     /**
      * For items of type {@link MenuItemType#IMAGE}, sets the URL of the Image for this Menu Item
      * @param imageUrl
      */
-    public void setImageUrl(String imageUrl);
+    void setImage(Media media);
 
     /**
      * Returns the {@link Menu} to which this menuItem belongs

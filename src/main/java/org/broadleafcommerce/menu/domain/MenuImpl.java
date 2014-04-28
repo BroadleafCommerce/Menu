@@ -85,6 +85,7 @@ public class MenuImpl implements Menu, AdminMainEntity {
 
     @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = { CascadeType.ALL }, orphanRemoval = true)
     @AdminPresentationCollection(friendlyName = "MenuItemImpl_MenuItems",
+            sortProperty = "sequence",
             addType = AddMethodType.PERSIST)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
     @BatchSize(size = 50)
