@@ -19,6 +19,7 @@
  */
 package org.broadleafcommerce.menu.service;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.CategoryXref;
 import org.broadleafcommerce.menu.dao.MenuDao;
@@ -49,7 +50,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuItemDTO> constructMenuItemDTOsForMenu(Menu menu) {
-        if (menu.getMenuItems() != null && !menu.getMenuItems().isEmpty()) {
+        if (CollectionUtils.isNotEmpty(menu.getMenuItems())) {
             List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
             for (MenuItem menuItem : menu.getMenuItems()) {
                 dtos.add(convertMenuItemToDTO(menuItem));
@@ -70,7 +71,7 @@ public class MenuServiceImpl implements MenuService {
 
             List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
             List<MenuItem> items = menuItem.getLinkedMenu().getMenuItems();
-            if (items != null && !items.isEmpty()) {
+            if (CollectionUtils.isNotEmpty(items)) {
                 for (MenuItem item : items) {
                     submenu.add(convertMenuItemToDTO(item));
                 }
@@ -101,7 +102,7 @@ public class MenuServiceImpl implements MenuService {
 
         List<CategoryXref> categoryXrefs = category.getChildCategoryXrefs();
 
-        if (categoryXrefs != null && !categoryXrefs.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(categoryXrefs)) {
             List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
             for (CategoryXref xref : categoryXrefs) {
                 submenu.add(convertCategoryToMenuItemDTO(xref.getSubCategory()));
