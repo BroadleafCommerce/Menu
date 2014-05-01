@@ -1,2 +1,2 @@
 - [[Home | .]]
-- [[Menu Environment Setup]]
+- [[Module Installation]]

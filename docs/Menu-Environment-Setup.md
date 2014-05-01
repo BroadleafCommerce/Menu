@@ -1,4 +1,0 @@
-# Menu Environment Setup
-
-## Prerequisites
-
