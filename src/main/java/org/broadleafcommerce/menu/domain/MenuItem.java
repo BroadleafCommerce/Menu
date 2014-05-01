@@ -80,16 +80,16 @@ public interface MenuItem extends Serializable {
     public void setActionUrl(String actionUrl);
 
     /**
-     * For items of type {@link MenuItemType#IMAGE}, gets the URL of the Image for this Menu Item
+     * For items of type {@link MenuItemType#LINK}, gets any Media associated with this Menu Item
      * @return
      */
-    Media getImage();
+    public Media getImage();
 
     /**
-     * For items of type {@link MenuItemType#IMAGE}, sets the URL of the Image for this Menu Item
+     * For items of type {@link MenuItemType#LINK}, sets an Image for this Menu Item
      * @param imageUrl
      */
-    void setImage(Media media);
+    public void setImage(Media media);
 
     /**
      * Returns the {@link Menu} to which this menuItem belongs
@@ -153,13 +153,13 @@ public interface MenuItem extends Serializable {
     public BigDecimal getSequence();
 
     /**
-     * For items of type {@link MenuItemType#LINK}, gets the alt text for the anchor.
+     * For items of type {@link MenuItemType#LINK}, gets the alt text for the associated image.
      * @return
      */
     public String getAltText();
 
     /**
-     * For items of type {@link MenuItemType#LINK}, stores the alt text for the anchor.
+     * For items of type {@link MenuItemType#LINK}, stores the alt text for the associated image.
      * @return
      */
     public void setAltText(String altText);
