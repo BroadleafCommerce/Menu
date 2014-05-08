@@ -43,9 +43,9 @@ public interface MenuItem extends Serializable {
     public void setId(Long id);
 
     /**
-     * The value to show for this menu item when displayed on a site.
-     * Will return the configured Label, unless of type {@link MenuItemType#PRODUCT}, or {@link MenuItemType#CATEGORY},
-     * or {@link MenuItemType#SUBMENU} which will return the corresponding linked name.
+     * Returns the label for this menu item
+     * @see MenuItem.getDerivedLabel() to get the label based on MenuItemType
+     * @return
      */
     public String getLabel();
 
@@ -195,6 +195,13 @@ public interface MenuItem extends Serializable {
      *
      * @return
      */
-    public String getUrl();
+    public String getDerivedUrl();
+
+    /**
+     * Convenience method that will always return the configured Label if specified.
+     * If it is not specified and of type {@link MenuItemType#PRODUCT}, or {@link MenuItemType#CATEGORY},
+     * or {@link MenuItemType#SUBMENU}, it will return the corresponding linked name.
+     */
+    public String getDerivedLabel();
 
 }

@@ -49,6 +49,11 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
+    public MenuItem findMenuItemById(Long menuItemId) {
+        return menuDao.readMenuItemById(menuItemId);
+    }
+
+    @Override
     public List<MenuItemDTO> constructMenuItemDTOsForMenu(Menu menu) {
         if (CollectionUtils.isNotEmpty(menu.getMenuItems())) {
             List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
@@ -66,8 +71,8 @@ public class MenuServiceImpl implements MenuService {
         if (MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()) &&
                 menuItem.getLinkedMenu() != null) {
             MenuItemDTO dto = new MenuItemDTO();
-            dto.setUrl(menuItem.getUrl());
-            dto.setLabel(menuItem.getLabel());
+            dto.setUrl(menuItem.getDerivedUrl());
+            dto.setLabel(menuItem.getDerivedLabel());
 
             List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
             List<MenuItem> items = menuItem.getLinkedMenu().getMenuItems();
@@ -84,8 +89,8 @@ public class MenuServiceImpl implements MenuService {
             return convertCategoryToMenuItemDTO(menuItem.getLinkedCategory());
         } else {
             MenuItemDTO dto = new MenuItemDTO();
-            dto.setUrl(menuItem.getUrl());
-            dto.setLabel(menuItem.getLabel());
+            dto.setUrl(menuItem.getDerivedUrl());
+            dto.setLabel(menuItem.getDerivedLabel());
             if (menuItem.getImage() != null) {
                 dto.setImageUrl(menuItem.getImage().getUrl());
                 dto.setAltText(menuItem.getAltText());

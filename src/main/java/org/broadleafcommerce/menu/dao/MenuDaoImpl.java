@@ -23,6 +23,7 @@ import org.broadleafcommerce.common.util.dao.TypedQueryBuilder;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuImpl;
 import org.broadleafcommerce.menu.domain.MenuItem;
+import org.broadleafcommerce.menu.domain.MenuItemImpl;
 import org.hibernate.ejb.QueryHints;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -53,6 +54,11 @@ public class MenuDaoImpl implements MenuDao {
     @Override
     public Menu readMenuById(Long menuId) {
         return em.find(MenuImpl.class, menuId);
+    }
+
+    @Override
+    public MenuItem readMenuItemById(Long menuItemId) {
+        return em.find(MenuItemImpl.class, menuItemId);
     }
 
     @Override

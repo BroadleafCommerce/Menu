@@ -20,6 +20,7 @@
 package org.broadleafcommerce.menu.service;
 
 import org.broadleafcommerce.menu.domain.Menu;
+import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.dto.MenuItemDTO;
 import java.util.List;
 
@@ -38,6 +39,13 @@ public interface MenuService {
      * @return
      */
     public Menu findMenuByName(String menuName);
+
+    /**
+     * Returns the menu item matching the passed in id.
+     * @param menuItemId
+     * @return
+     */
+    public MenuItem findMenuItemById(Long menuItemId);
 
     /**
      * A Utility method that constructs generic MenuItemDTOs that are not dependent on a Menu Item Type.

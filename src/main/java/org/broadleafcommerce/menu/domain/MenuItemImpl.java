@@ -180,20 +180,7 @@ public class MenuItemImpl implements MenuItem {
 
     @Override
     public String getLabel() {
-        String l = DynamicTranslationProvider.getValue(this, "label", label);
-
-        if (MenuItemType.PRODUCT.equals(getMenuItemType()) &&
-                getLinkedProduct() != null) {
-            l = getLinkedProduct().getName();
-        } else if (MenuItemType.CATEGORY.equals(getMenuItemType()) &&
-                getLinkedCategory() != null) {
-            l = getLinkedCategory().getName();
-        } else if (MenuItemType.SUBMENU.equals(getMenuItemType()) &&
-                getLinkedMenu() != null) {
-            l = getLinkedMenu().getName();
-        }
-
-        return l;
+        return DynamicTranslationProvider.getValue(this, "label", label);
     }
 
     @Override
@@ -302,7 +289,7 @@ public class MenuItemImpl implements MenuItem {
     }
 
     @Override
-    public String getUrl() {
+    public String getDerivedUrl() {
         String url = getActionUrl();
 
         if (MenuItemType.PRODUCT.equals(getMenuItemType()) &&
@@ -317,6 +304,26 @@ public class MenuItemImpl implements MenuItem {
         }
 
         return url;
+    }
+
+    @Override
+    public String getDerivedLabel() {
+        String l = getLabel();
+
+        if (l == null) {
+            if (MenuItemType.PRODUCT.equals(getMenuItemType()) &&
+                    getLinkedProduct() != null) {
+                l = getLinkedProduct().getName();
+            } else if (MenuItemType.CATEGORY.equals(getMenuItemType()) &&
+                    getLinkedCategory() != null) {
+                l = getLinkedCategory().getName();
+            } else if (MenuItemType.SUBMENU.equals(getMenuItemType()) &&
+                    getLinkedMenu() != null) {
+                l = getLinkedMenu().getName();
+            }
+        }
+
+        return l;
     }
 
     public static class Presentation {
