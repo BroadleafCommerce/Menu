@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <blc.version>3.2.0-SNAPSHOT</blc.version>
-        <project.uri>${user.dir}</project.uri>
+        <project.uri>${project.baseUri}</project.uri>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
@@ -132,7 +132,7 @@
                     <organizationName>Broadleaf Commerce</organizationName>
                     <inceptionYear>2009</inceptionYear>
                     <licenseName>blc_apache</licenseName>
-                    <licenseResolver>file:${project.uri}/licenses</licenseResolver>
+                    <licenseResolver>${project.uri}/licenses</licenseResolver>
                     <excludes>
                         <exclude>**/*.sql</exclude>
                         <exclude>**/*.html</exclude>
