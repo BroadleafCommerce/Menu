@@ -1,2 +1,3 @@
 - [[Home | .]]
 - [[Module Installation]]
+- [[Data Model]]
