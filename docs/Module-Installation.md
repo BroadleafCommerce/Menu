@@ -70,3 +70,27 @@ To create the Menu management section in the Broadleaf admin, you will need to l
 ```
 
 > Note: In development, you can automatically load this SQL files by adding it to the blPU.hibernate.hbm2ddl.import\_files property in the development-shared.properties file.
+
+
+## View Changes
+
+If you are using the Heat Clinic demo as a starting point. You can utilize the new Thymeleaf MenuProcessor to draw your navigation.
+Add something like the following to your `nav.html` file:
+
+```html
+    <blc:menu resultVar="menuItems" menuName="Header Nav" />
+    <ul th:if="${menuItems}">
+        <li th:each="menuItem : ${menuItems}">
+
+            <a th:href="@{${menuItem.url}}" th:class="${menuItemStat.first}? 'home'">
+                <span th:text="${menuItem.label}"></span>
+            </a>
+            <ul th:if="${menuItem.submenu != null}" class="sub-menu">
+                <li th:each="submenuItem : ${menuItem.submenu}">
+                    <a th:href="@{${submenuItem.url}}" th:text="${submenuItem.label}"></a>
+                </li>
+            </ul>
+
+        </li>
+    </ul>
+```
