@@ -92,7 +92,7 @@ public class MenuImpl implements Menu, AdminMainEntity {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
     @BatchSize(size = 50)
     @OrderBy(value = "sequence")
-    @ClonePolicyCollection
+    @ClonePolicyCollection(useProductionFiltering = true)
     protected List<MenuItem> menuItems = new ArrayList<MenuItem>(20);
 
     @Override
