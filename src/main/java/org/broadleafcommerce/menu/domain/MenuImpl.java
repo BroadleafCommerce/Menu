@@ -131,10 +131,12 @@ public class MenuImpl implements Menu, AdminMainEntity {
     }
 
     public static class Presentation {
-        private Presentation() {}
+        private Presentation() {
+        }
 
         public static class FieldOrder {
-            private FieldOrder() {}
+            private FieldOrder() {
+            }
 
             // General Fields
             public static final int NAME = 1000;
