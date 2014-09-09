@@ -327,8 +327,12 @@ public class MenuItemImpl implements MenuItem {
     }
 
     public static class Presentation {
+        private Presentation() {
+        }
 
         public static class FieldOrder {
+            private FieldOrder() {
+            }
 
             // General Fields
             public static final int LABEL = 1000;
