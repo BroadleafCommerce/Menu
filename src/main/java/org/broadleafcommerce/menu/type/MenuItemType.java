@@ -95,11 +95,7 @@ public class MenuItemType implements Serializable {
             return false;
         }
         MenuItemType other = (MenuItemType) obj;
-        if (type == null) {
-            if (other.type != null) {
-                return false;
-            }
-        } else if (!type.equals(other.type)) {
+        if (!type.equals(other.type)) {
             return false;
         }
         return true;
