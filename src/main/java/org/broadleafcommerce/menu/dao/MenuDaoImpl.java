@@ -69,7 +69,7 @@ public class MenuDaoImpl implements MenuDao {
         query.setHint(QueryHints.HINT_CACHE_REGION, "query.Cms");
 
         List<Menu> results = query.getResultList();
-        if (results.size() > 0) {
+        if (!results.isEmpty()) {
             return results.get(0);
         } else {
             return null;
