@@ -86,4 +86,17 @@
         </property>
     </bean>    
 
+    <bean p:order="2100" id="blMenuCopier" class="org.broadleafcommerce.menu.copy.MenuCopier" />
+    <bean id="blMenuProfileSiteCopiers" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <ref bean="blMenuCopier" />
+            </list>
+        </property>
+    </bean>
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMenuProfileSiteCopiers"/>
+        <property name="targetRef" value="blProfileSiteCopiers"/>
+    </bean>
+
 </beans>
