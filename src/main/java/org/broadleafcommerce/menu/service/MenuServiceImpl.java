@@ -55,15 +55,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuItemDTO> constructMenuItemDTOsForMenu(Menu menu) {
+        List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
         if (CollectionUtils.isNotEmpty(menu.getMenuItems())) {
-            List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
             for (MenuItem menuItem : menu.getMenuItems()) {
                 dtos.add(convertMenuItemToDTO(menuItem));
             }
-            return dtos;
         }
-
-        return null;
+        return dtos;
     }
 
     protected MenuItemDTO convertMenuItemToDTO(MenuItem menuItem) {
