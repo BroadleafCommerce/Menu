@@ -22,14 +22,17 @@ package org.broadleafcommerce.menu.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.CategoryXref;
+import org.broadleafcommerce.core.catalog.service.CatalogService;
 import org.broadleafcommerce.menu.dao.MenuDao;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.dto.MenuItemDTO;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Resource;
 
 @Service("blMenuService")
@@ -37,6 +40,9 @@ public class MenuServiceImpl implements MenuService {
     
     @Resource(name = "blMenuDao")
     protected MenuDao menuDao;
+    
+    @Resource(name = "blCatalogService")
+    protected CatalogService catalogService;
 
     @Override
     public Menu findMenuById(Long id) {
@@ -66,6 +72,11 @@ public class MenuServiceImpl implements MenuService {
 
     protected MenuItemDTO convertMenuItemToDTO(MenuItem menuItem) {
 
+        Category category = null;
+        if (MenuItemType.CATEGORY.equals(menuItem.getMenuItemType())) {
+            category = catalogService.findCategoryByURI(menuItem.getActionUrl());
+        }
+
         if (MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()) &&
                 menuItem.getLinkedMenu() != null) {
             MenuItemDTO dto = new MenuItemDTO();
@@ -82,9 +93,8 @@ public class MenuServiceImpl implements MenuService {
 
             dto.setSubmenu(submenu);
             return dto;
-        } else if (MenuItemType.CATEGORY.equals(menuItem.getMenuItemType()) &&
-                menuItem.getLinkedCategory() != null) {
-            return convertCategoryToMenuItemDTO(menuItem.getLinkedCategory());
+        } else if (category != null) {
+            return convertCategoryToMenuItemDTO(category);
         } else {
             MenuItemDTO dto = new MenuItemDTO();
             dto.setUrl(menuItem.getDerivedUrl());
