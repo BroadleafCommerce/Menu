@@ -41,6 +41,7 @@ import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -98,7 +99,7 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
     protected BigDecimal sequence;
 
-    @ManyToOne(optional = true, targetEntity = MenuImpl.class)
+    @ManyToOne(optional = true, targetEntity = MenuImpl.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "PARENT_MENU_ID")
     protected Menu parentMenu;
 
