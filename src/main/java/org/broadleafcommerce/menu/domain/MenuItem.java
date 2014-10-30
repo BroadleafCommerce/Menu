@@ -20,6 +20,7 @@
 package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
+import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 import org.broadleafcommerce.common.media.domain.Media;
 import org.broadleafcommerce.menu.type.MenuItemType;
 
@@ -27,7 +28,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 
-public interface MenuItem extends Serializable {
+public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
 
     /**
      * Id of this menuItem

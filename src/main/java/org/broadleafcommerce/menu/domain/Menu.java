@@ -19,10 +19,11 @@
  */
 package org.broadleafcommerce.menu.domain;
 
-import java.io.Serializable;
-import java.util.List;
+import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 
 import javax.annotation.Nonnull;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a menu, typically to drive the display of navigation on a website.
@@ -30,7 +31,7 @@ import javax.annotation.Nonnull;
  * @author bpolster
  *
  */
-public interface Menu extends Serializable {
+public interface Menu extends Serializable, MultiTenantCloneable<Menu> {
 
     /**
      * Internal id of the menu.

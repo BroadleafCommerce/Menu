@@ -21,6 +21,8 @@ package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.cms.page.domain.PageImpl;
+import org.broadleafcommerce.common.copy.CreateResponse;
+import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -34,24 +36,14 @@ import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-
-import java.math.BigDecimal;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import javax.persistence.*;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -276,6 +268,31 @@ public class MenuItemImpl implements MenuItem {
         }
 
         return l;
+    }
+
+    @Override
+    public <G extends MenuItem> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
+        CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
+        if (createResponse.isAlreadyPopulated()) {
+            return createResponse;
+        }
+        MenuItem cloned = createResponse.getClone();
+        cloned.setActionUrl(actionUrl);
+        cloned.setAltText(altText);
+        cloned.setCustomHtml(customHtml);
+        cloned.setLabel(label);
+        // the Class MediaImpl implements MultiTenantCloneable instead of Interface Media to fix potential conflict  with skuMediaXrefImpl
+        MediaImpl imageImpl = (MediaImpl)image;
+        CreateResponse<MediaImpl> clonedImgRso = imageImpl.createOrRetrieveCopyInstance(context);
+        cloned.setImage(clonedImgRso.getClone());
+        cloned.setLinkedPage(linkedPage.createOrRetrieveCopyInstance(context).getClone());
+        cloned.setLinkedMenu(linkedMenu.createOrRetrieveCopyInstance(context).getClone());
+        cloned.setMenuItemType(getMenuItemType());
+        cloned.setSequence(sequence);
+        // dont clone -- parent menu will set itself here
+        cloned.setParentMenu(parentMenu);
+
+        return createResponse;
     }
 
     public static class Presentation {
