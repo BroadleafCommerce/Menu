@@ -21,9 +21,10 @@ package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 /**
  * Represents a menu, typically to drive the display of navigation on a website.

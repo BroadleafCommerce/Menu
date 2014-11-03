@@ -31,17 +31,24 @@ import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationCollection;
 import org.broadleafcommerce.common.presentation.client.AddMethodType;
-import org.hibernate.annotations.*;
+import org.broadleafcommerce.core.catalog.domain.Sku;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import javax.persistence.CascadeType;
-import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -124,24 +131,6 @@ public class MenuImpl implements Menu, AdminMainEntity {
         return getName();
     }
 
-    @Override
-    public <G extends Menu> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
-        CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
-        if (createResponse.isAlreadyPopulated()) {
-            return createResponse;
-        }
-        Menu cloned = createResponse.getClone();
-        cloned.setName(name);
-        for(MenuItem entry : menuItems){
-            CreateResponse<MenuItem> clonedMenuItemRsp = entry.createOrRetrieveCopyInstance(context);
-            MenuItem clonedItem = clonedMenuItemRsp.getClone();
-            clonedItem.setParentMenu(cloned);
-            cloned.getMenuItems().add(clonedItem);
-        }
-
-        return createResponse;
-    }
-
     public static class Presentation {
         private Presentation() {
         }
@@ -156,4 +145,17 @@ public class MenuImpl implements Menu, AdminMainEntity {
 
     }
 
+    @Override
+    public <G extends Menu> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
+        CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
+        if (createResponse.isAlreadyPopulated()) {
+            return createResponse;
+        }
+        Menu cloned = createResponse.getClone();
+        cloned.setName(name);
+        for (MenuItem item : menuItems) {
+            cloned.getMenuItems().add(item.createOrRetrieveCopyInstance(context).getClone());
+        }
+        return createResponse;
+    }
 }
