@@ -11,10 +11,10 @@
     <artifactId>broadleaf-menu</artifactId>
     <name>BroadleafCommerce Menu</name>
     <description>BroadleafCommerce Menu</description>
-    <version>1.0.0-ALPHA-ENT-13</version>
+    <version>1.0.0-ALPHA-ENT-14</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>3.2.0-ALPHA-ENT-13</blc.version>
+        <blc.version>3.2.0-ALPHA-ENT-14</blc.version>
         <project.uri>${project.baseUri}</project.uri>
     </properties>
     <scm>
