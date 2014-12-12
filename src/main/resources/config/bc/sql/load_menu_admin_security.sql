@@ -1,5 +1,6 @@
 ----------------------------------------------------------------------------------------------------------------------------
--- The range of IDs available for the Menu module is [ -27,000 to -27,999 ]
+-- The range of IDs available for the Menu module is [ -27,000 to -27,999 ] 
+-- (see https://github.com/BroadleafCommerce/docs-internal/edit/master/Module%20IDs.md 
 ----------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO BLC_ADMIN_PERMISSION (ADMIN_PERMISSION_ID, DESCRIPTION, NAME, PERMISSION_TYPE) VALUES (-27000,'Read Menu','PERMISSION_READ_MENU', 'READ');
