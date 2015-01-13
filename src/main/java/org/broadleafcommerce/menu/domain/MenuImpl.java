@@ -20,7 +20,8 @@
 package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.common.admin.domain.AdminMainEntity;
-import org.broadleafcommerce.common.extensibility.jpa.clone.ClonePolicyCollection;
+import org.broadleafcommerce.common.copy.CreateResponse;
+import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -30,6 +31,7 @@ import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationCollection;
 import org.broadleafcommerce.common.presentation.client.AddMethodType;
+import org.broadleafcommerce.core.catalog.domain.Sku;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -92,7 +94,6 @@ public class MenuImpl implements Menu, AdminMainEntity {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
     @BatchSize(size = 50)
     @OrderBy(value = "sequence")
-    @ClonePolicyCollection(useProductionFiltering = true)
     protected List<MenuItem> menuItems = new ArrayList<MenuItem>(20);
 
     @Override
@@ -144,4 +145,17 @@ public class MenuImpl implements Menu, AdminMainEntity {
 
     }
 
+    @Override
+    public <G extends Menu> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
+        CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
+        if (createResponse.isAlreadyPopulated()) {
+            return createResponse;
+        }
+        Menu cloned = createResponse.getClone();
+        cloned.setName(name);
+        for (MenuItem item : menuItems) {
+            cloned.getMenuItems().add(item.createOrRetrieveCopyInstance(context).getClone());
+        }
+        return createResponse;
+    }
 }

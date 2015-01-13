@@ -20,6 +20,7 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
@@ -85,5 +86,18 @@
             </list>
         </property>
     </bean>    
+
+    <bean p:order="2100" id="blMenuCopier" class="org.broadleafcommerce.menu.copy.MenuCopier" />
+    <bean id="blMenuProfileSiteCopiers" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <ref bean="blMenuCopier" />
+            </list>
+        </property>
+    </bean>
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMenuProfileSiteCopiers"/>
+        <property name="targetRef" value="blProfileSiteCopiers"/>
+    </bean>
 
 </beans>

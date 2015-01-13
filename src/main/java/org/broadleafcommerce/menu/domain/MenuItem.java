@@ -20,15 +20,15 @@
 package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
+import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 import org.broadleafcommerce.common.media.domain.Media;
-import org.broadleafcommerce.core.catalog.domain.Category;
-import org.broadleafcommerce.core.catalog.domain.Product;
 import org.broadleafcommerce.menu.type.MenuItemType;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 
-public interface MenuItem extends Serializable {
+public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
 
     /**
      * Id of this menuItem
@@ -103,31 +103,6 @@ public interface MenuItem extends Serializable {
      */
     public void setParentMenu(Menu menu);
     
-    /**
-     * For items of type {@link MenuItemType#CATEGORY}, stores the associated category.
-     * @return
-     */
-    public Category getLinkedCategory();
-
-    /**
-     * For items of type {@link MenuItemType#CATEGORY}, returns the associated category.
-     * @return
-     */
-    public void setLinkedCategory(Category linkedCategory);
-
-    /**
-     * For items of type {@link MenuItemType#PRODUCT}, stores the associated product.
-     * @return
-     */
-    public Product getLinkedProduct();
-
-    /**
-     * For items of type {@link MenuItemType#PRODUCT}, returns the associated product.
-     * @return
-     */
-    public void setLinkedProduct(Product linkedProduct);
-
-
     /**
      * The menu represented by this MenuItem.   (Allows for nested menus).
      * @return

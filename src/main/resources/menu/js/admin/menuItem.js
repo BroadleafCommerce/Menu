@@ -52,20 +52,18 @@
             $image.addClass('hidden');
             $altText.addClass('hidden');
             $linkedMenu.addClass('hidden');
-            $linkedCategory.addClass('hidden');
-            $linkedProduct.addClass('hidden');
             $linkedPage.addClass('hidden');
             $customHtml.addClass('hidden');
 
             switch (menuItemType) {
                 case "CATEGORY":
-                    $linkedCategory.removeClass('hidden');
+                    $actionUrl.removeClass('hidden');
                     break;
                 case "SUBMENU":
                     $linkedMenu.removeClass('hidden');
                     break;
                 case "PRODUCT":
-                    $linkedProduct.removeClass('hidden');
+                    $actionUrl.removeClass('hidden');
                     break;
                 case "PAGE":
                     $linkedPage.removeClass('hidden');

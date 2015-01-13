@@ -21,6 +21,8 @@ package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.cms.page.domain.PageImpl;
+import org.broadleafcommerce.common.copy.CreateResponse;
+import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -32,17 +34,17 @@ import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
-import org.broadleafcommerce.core.catalog.domain.Category;
-import org.broadleafcommerce.core.catalog.domain.CategoryImpl;
-import org.broadleafcommerce.core.catalog.domain.Product;
-import org.broadleafcommerce.core.catalog.domain.ProductImpl;
+import org.broadleafcommerce.core.catalog.domain.Sku;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+
 import java.math.BigDecimal;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -100,7 +102,7 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
     protected BigDecimal sequence;
 
-    @ManyToOne(optional = true, targetEntity = MenuImpl.class)
+    @ManyToOne(optional = true, targetEntity = MenuImpl.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "PARENT_MENU_ID")
     protected Menu parentMenu;
 
@@ -120,20 +122,6 @@ public class MenuItemImpl implements MenuItem {
     @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
             order = Presentation.FieldOrder.ALT_TEXT)
     protected String altText;
-
-    @ManyToOne(targetEntity = CategoryImpl.class)
-    @JoinColumn(name = "CATEGORY_ID")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Category",
-            order = Presentation.FieldOrder.CATEGORY)
-    @AdminPresentationToOneLookup()
-    protected Category linkedCategory;
-
-    @ManyToOne(targetEntity = ProductImpl.class)
-    @JoinColumn(name = "PRODUCT_ID")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Product",
-            order = Presentation.FieldOrder.PRODUCT)
-    @AdminPresentationToOneLookup()
-    protected Product linkedProduct;
 
     @ManyToOne(targetEntity = MenuImpl.class)
     @JoinColumn(name = "LINKED_MENU_ID")
@@ -228,25 +216,6 @@ public class MenuItemImpl implements MenuItem {
         this.parentMenu = parentMenu;
     }
 
-    @Override
-    public Category getLinkedCategory() {
-        return linkedCategory;
-    }
-
-    @Override
-    public void setLinkedCategory(Category linkedCategory) {
-        this.linkedCategory = linkedCategory;
-    }
-
-    @Override
-    public Product getLinkedProduct() {
-        return linkedProduct;
-    }
-
-    @Override
-    public void setLinkedProduct(Product linkedProduct) {
-        this.linkedProduct = linkedProduct;
-    }
 
     @Override
     public Menu getLinkedMenu() {
@@ -292,14 +261,7 @@ public class MenuItemImpl implements MenuItem {
     public String getDerivedUrl() {
         String url = getActionUrl();
 
-        if (MenuItemType.PRODUCT.equals(getMenuItemType()) &&
-                getLinkedProduct() != null ) {
-            url = getLinkedProduct().getUrl();
-        } else if (MenuItemType.CATEGORY.equals(getMenuItemType()) &&
-                getLinkedCategory() != null) {
-            url = getLinkedCategory().getUrl();
-        } else if (MenuItemType.PAGE.equals(getMenuItemType()) &&
-                getLinkedPage() != null) {
+        if (MenuItemType.PAGE.equals(getMenuItemType()) && getLinkedPage() != null) {
             url = getLinkedPage().getFullUrl();
         }
 
@@ -311,19 +273,40 @@ public class MenuItemImpl implements MenuItem {
         String l = getLabel();
 
         if (l == null) {
-            if (MenuItemType.PRODUCT.equals(getMenuItemType()) &&
-                    getLinkedProduct() != null) {
-                l = getLinkedProduct().getName();
-            } else if (MenuItemType.CATEGORY.equals(getMenuItemType()) &&
-                    getLinkedCategory() != null) {
-                l = getLinkedCategory().getName();
-            } else if (MenuItemType.SUBMENU.equals(getMenuItemType()) &&
-                    getLinkedMenu() != null) {
+            if (MenuItemType.SUBMENU.equals(getMenuItemType()) && getLinkedMenu() != null) {
                 l = getLinkedMenu().getName();
             }
         }
 
         return l;
+    }
+
+    @Override
+    public <G extends MenuItem> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
+        CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
+        if (createResponse.isAlreadyPopulated()) {
+            return createResponse;
+        }
+        MenuItem cloned = createResponse.getClone();
+        cloned.setLabel(label);
+        cloned.setMenuItemType(getMenuItemType());
+        cloned.setSequence(sequence);
+        if (parentMenu != null) {
+            cloned.setParentMenu(parentMenu.createOrRetrieveCopyInstance(context).getClone());
+        }
+        cloned.setActionUrl(actionUrl);
+        if (image != null) {
+            cloned.setImage(((MediaImpl) image).createOrRetrieveCopyInstance(context).getClone());
+        }
+        cloned.setAltText(altText);
+        if (linkedMenu != null) {
+            cloned.setLinkedMenu(linkedMenu.createOrRetrieveCopyInstance(context).getClone());
+        }
+        if (linkedPage != null) {
+            cloned.setLinkedPage(linkedPage.createOrRetrieveCopyInstance(context).getClone());
+        }
+        cloned.setCustomHtml(customHtml);
+        return createResponse;
     }
 
     public static class Presentation {
