@@ -27,32 +27,6 @@ _The parent pom is the one located in the root directory of the Broadleaf Commer
     </dependency>
 ```
 
-**Step 3.** Update the `patchConfigLocation` files in your `admin/web.xml` file:
-
-```xml
-    classpath:/bl-menu-applicationContext.xml
-    classpath:/bl-menu-admin-applicationContext.xml
-```
-> Note: This line should go before the `classpath:/applicationContext.xml` line
-
-
-**Step 4.** Update the `contextConfigLocation` for `DispatcherServlet` files in your `admin/web.xml` file:
-
-```xml
-    classpath:/bl-menu-admin-applicationContext-servlet.xml
-```
-
-> Note: This line should go just before the `/WEB-INF/applicationContext-servlet-admin.xml` line
-
-
-**Step 5.** Update the `patchConfigLocation` files in your `site/web.xml` file:
-
-```xml
-    classpath:/bl-menu-applicationContext.xml
-```
-> Note: This line should go before the `classpath:/applicationContext.xml` line
-
-
 ## Data Changes
 
 ### Schema Changes
