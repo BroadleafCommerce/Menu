@@ -60,6 +60,7 @@
                     $actionUrl.removeClass('hidden');
                     break;
                 case "SUBMENU":
+                    $actionUrl.removeClass('hidden');
                     $linkedMenu.removeClass('hidden');
                     break;
                 case "PRODUCT":
