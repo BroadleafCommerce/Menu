@@ -11,7 +11,7 @@
     <artifactId>broadleaf-menu</artifactId>
     <name>BroadleafCommerce Menu</name>
     <description>BroadleafCommerce Menu</description>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-RC3</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <blc.version>4.0.0-BETA3</blc.version>
