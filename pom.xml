@@ -95,25 +95,11 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <!-- Milestone releases should stay in BLC -->
-            <id>milestone-release</id>
-            <distributionManagement>
-                <repository>
-                    <id>releases</id>
-                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
-    
-    <!-- On normal releases (GA) this should go to Maven central -->        
+
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Release Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>releases</id>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
