@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  BroadleafCommerce Menu
+  %%
+  Copyright (C) 2009 - 2014 Broadleaf Commerce
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+        http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <!-- All non-weave related configuration for this module belongs here -->
+
+    <bean class="org.broadleafcommerce.common.logging.ModuleLifecycleLoggingBean">
+        <property name="moduleName" value="Menu" />
+        <property name="lifeCycleEvent" value="LOADING" />
+    </bean>
+
+    <!-- Scan the module -->
+    <context:component-scan base-package="org.broadleafcommerce.menu">
+        <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.*"/>
+    </context:component-scan>
+    
+    <!-- Thymeleaf Config -->
+    <bean id="blDialectMenuProcessors" class="org.springframework.beans.factory.config.SetFactoryBean">
+        <property name="sourceSet">
+            <set>
+                <ref bean="blMenuProcessor"/>                      
+            </set>
+        </property>
+    </bean>
+    
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blDialectMenuProcessors" />
+        <property name="targetRef" value="blDialectProcessors" />
+    </bean>    
+
+
+    <!--  Add New TranslatedEntity Types -->
+    <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
+        <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.Menu"/>
+        <constructor-arg index="1" value="Menu"/>
+    </bean>
+    <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
+        <constructor-arg index="0" value="org.broadleafcommerce.menu.domain.MenuItem"/>
+        <constructor-arg index="1" value="MenuItem"/>
+    </bean>
+    
+    <!-- Generic Configuration -->
+    <bean id="blConfiguration" class="org.broadleafcommerce.common.config.RuntimeEnvironmentPropertiesConfigurer">
+        <property name="overridableProperyLocations">
+            <set>
+                <value>classpath:config/bc/menu/</value>
+            </set>
+        </property>
+    </bean>
+    
+    <bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>classpath*:/META-INF/persistence-menu.xml</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="blMergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>classpath:bl-menu-applicationContext-entity.xml</value>
+            </list>
+        </property>
+    </bean>    
+
+    <bean p:order="2100" id="blMenuCopier" class="org.broadleafcommerce.menu.copy.MenuCopier" />
+    <bean id="blMenuProfileSiteCopiers" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <ref bean="blMenuCopier" />
+            </list>
+        </property>
+    </bean>
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMenuProfileSiteCopiers"/>
+        <property name="targetRef" value="blProfileSiteCopiers"/>
+    </bean>
+
+</beans>
