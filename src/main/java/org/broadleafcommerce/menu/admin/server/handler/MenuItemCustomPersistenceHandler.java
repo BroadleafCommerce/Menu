@@ -107,7 +107,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
             allMergedProperties.put(MergedPropertyType.PRIMARY, properties);
             Class<?>[] entityClasses = dynamicEntityDao.getAllPolymorphicEntitiesFromCeiling(MenuItem.class);
-            ClassMetadata mergedMetadata = helper.getMergedClassMetadata(entityClasses, allMergedProperties);
+            ClassMetadata mergedMetadata = helper.buildClassMetadata(entityClasses, persistencePackage, allMergedProperties);
 
             return new DynamicResultSet(mergedMetadata, null, null);
 
