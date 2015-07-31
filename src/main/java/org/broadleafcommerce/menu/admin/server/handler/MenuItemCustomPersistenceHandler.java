@@ -22,6 +22,7 @@ package org.broadleafcommerce.menu.admin.server.handler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.common.exception.ServiceException;
+import org.broadleafcommerce.common.presentation.client.OperationType;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
 import org.broadleafcommerce.menu.domain.MenuItem;
@@ -65,7 +66,8 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         String ceilingEntityFullyQualifiedClassname = persistencePackage.getCeilingEntityFullyQualifiedClassname();
         try {
             Class testClass = Class.forName(ceilingEntityFullyQualifiedClassname);
-            return MenuItem.class.isAssignableFrom(testClass);
+            OperationType operationType = persistencePackage.getPersistencePerspective().getOperationTypes().getInspectType();
+            return MenuItem.class.isAssignableFrom(testClass) && OperationType.BASIC.equals(operationType);
         } catch (ClassNotFoundException e) {
             return false;
         }
