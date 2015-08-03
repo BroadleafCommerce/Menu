@@ -196,4 +196,11 @@ public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
      */
     public String getDerivedLabel();
 
+    /**
+     * Convenience method that will always return the MenuItemType name.  Helpful if the MenuItemType
+     * has been overwritten.
+     *
+     * @return type
+     */
+    public String getMenuItemTypeName();
 }

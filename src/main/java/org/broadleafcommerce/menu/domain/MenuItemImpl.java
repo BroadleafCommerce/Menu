@@ -329,6 +329,11 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     }
 
     @Override
+    public String getMenuItemTypeName() {
+        return type;
+    }
+
+    @Override
     public <G extends MenuItem> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
         CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
         if (createResponse.isAlreadyPopulated()) {
