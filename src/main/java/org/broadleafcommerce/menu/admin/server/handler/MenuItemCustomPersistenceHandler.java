@@ -61,6 +61,11 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     @Resource(name = "blMenuService")
     protected MenuService menuService;
 
+    /**
+     * When we are pulling back Media, the admin uses MenuItem for the ceiling entity class name,
+     * it should however be handled by the map structure module.  So only handle things in the MenuItem custom
+     * persistence handler for OperationType.BASIC
+     */
     @Override
     public Boolean canHandleInspect(PersistencePackage persistencePackage) {
         String ceilingEntityFullyQualifiedClassname = persistencePackage.getCeilingEntityFullyQualifiedClassname();

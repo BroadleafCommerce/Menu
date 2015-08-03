@@ -139,7 +139,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
                                     order = Presentation.FieldOrder.IMAGE_URL)
                     )
             })
-    private Map<String, MenuItemMediaXref> menuItemMedia = new HashMap<String, MenuItemMediaXref>();
+    protected Map<String, MenuItemMediaXref> menuItemMedia = new HashMap<String, MenuItemMediaXref>();
 
     @Transient
     protected Map<String, Media> legacyMenuItemMedia = new HashMap<String, Media>();
