@@ -38,14 +38,15 @@ public class MenuItemDTO implements Serializable {
     protected String url;
     protected String imageUrl;
     protected String altText;
+
     /**
-     * not always set, only it the menu item represents a category.
+     * not always set, only if the menu item represents a category.
      */
     protected Long categoryId;
-    
-	protected List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
-  
-	public String getLabel() {
+
+    protected List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
+
+    public String getLabel() {
         return label;
     }
 
@@ -85,17 +86,16 @@ public class MenuItemDTO implements Serializable {
         this.submenu = submenu;
     }
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-  
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
 }
