@@ -112,6 +112,7 @@ public class MenuServiceImpl implements MenuService {
         MenuItemDTO dto = new MenuItemDTO();
         dto.setLabel(category.getName());
         dto.setUrl(category.getUrl());
+        dto.setCategoryId(category.getId());
 
         List<CategoryXref> categoryXrefs = category.getChildCategoryXrefs();
 
