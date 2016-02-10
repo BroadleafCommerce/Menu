@@ -22,6 +22,7 @@ package org.broadleafcommerce.menu.admin.server.handler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.common.exception.ServiceException;
+import org.broadleafcommerce.common.presentation.client.OperationType;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
 import org.broadleafcommerce.menu.domain.MenuItem;
@@ -41,6 +42,7 @@ import org.broadleafcommerce.openadmin.server.dao.DynamicEntityDao;
 import org.broadleafcommerce.openadmin.server.service.handler.CustomPersistenceHandlerAdapter;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.BasicPersistenceModule;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.InspectHelper;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.PersistenceModule;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.RecordHelper;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
@@ -107,7 +109,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
             allMergedProperties.put(MergedPropertyType.PRIMARY, properties);
             Class<?>[] entityClasses = dynamicEntityDao.getAllPolymorphicEntitiesFromCeiling(MenuItem.class);
-            ClassMetadata mergedMetadata = helper.getMergedClassMetadata(entityClasses, allMergedProperties);
+            ClassMetadata mergedMetadata = helper.buildClassMetadata(entityClasses, persistencePackage, allMergedProperties);
 
             return new DynamicResultSet(mergedMetadata, null, null);
 
@@ -121,7 +123,9 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public DynamicResultSet fetch(PersistencePackage persistencePackage, CriteriaTransferObject cto, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
-        DynamicResultSet drs = ((BasicPersistenceModule) helper).fetch(persistencePackage, cto);
+        OperationType fetchType = persistencePackage.getPersistencePerspective().getOperationTypes().getFetchType();
+        PersistenceModule persistenceModule = helper.getCompatibleModule(fetchType);
+        DynamicResultSet drs = persistenceModule.fetch(persistencePackage, cto);
 
         for (Entity entity : drs.getRecords()) {
             Property menuItemId = entity.findProperty("id");
