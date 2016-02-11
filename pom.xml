@@ -120,7 +120,7 @@
                 </snapshotRepository>
                 <repository>
                     <id>releases</id>
-                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases/</url>
+                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
                 </repository>
             </distributionManagement>
         </profile>
