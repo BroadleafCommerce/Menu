@@ -66,7 +66,7 @@
         <repository>
             <id>public releases</id>
             <name>public releases</name>
-            <url>http://www.broadleafcommerce.org/nexus/content/repositories/releases</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases</url>
         </repository>
         <repository>
             <id>public snapshots</id>
@@ -97,11 +97,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
         </repository>
     </distributionManagement>
     <profiles>
@@ -116,7 +116,7 @@
             <distributionManagement>
                 <snapshotRepository>
                     <id>snapshots</id>
-                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
+                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
                 </snapshotRepository>
                 <repository>
                     <id>releases</id>
