@@ -14,7 +14,7 @@
     <version>2.0.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>5.0.0-M1</blc.version>
+        <blc.version>5.0.0-M3</blc.version>
         <project.uri>${project.baseUri}</project.uri>
         <attachSources>false</attachSources>
     </properties>
