@@ -35,7 +35,7 @@
          */
         initializeMenuItemFormFields : function($form) {
 
-            var menuItemType = $("#fields\\'type\\'\\.value", $form).val()
+            var menuItemType = $("#fields\\'type\\'\\.value", $form).val();
 
             // Initialize relevant fields
             var $actionUrl        = $form.find('#field-actionUrl');
