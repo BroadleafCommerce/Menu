@@ -26,6 +26,7 @@ import org.broadleafcommerce.menu.type.MenuItemType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 
 public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
@@ -80,16 +81,32 @@ public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
     public void setActionUrl(String actionUrl);
 
     /**
-     * For items of type {@link MenuItemType#LINK}, gets any Media associated with this Menu Item
-     * @return
+     * Returns a map of key/value pairs where the key is a string for the name of a media object and the value
+     * is a media object.
+     * @deprecated use {@link #getMenuItemMediaXref()} instead
      */
-    public Media getImage();
+    @Deprecated
+    public Map<String, Media> getMenuItemMedia();
 
     /**
-     * For items of type {@link MenuItemType#LINK}, sets an Image for this Menu Item
-     * @param imageUrl
+    * Sets a map of key/value pairs where the key is a string for the name of a media object and the value
+    * is an object of type Media.
+    * @deprecated use {@link #setMenuItemMediaXref(java.util.Map)} instead
+    */
+    @Deprecated
+    public void setMenuItemMedia(Map<String, Media> menuItemMedia);
+
+    /**
+     * Returns a map of key/value pairs where the key is a string for the name of a media object and the value
+     * is a cross-reference to a media object.
      */
-    public void setImage(Media media);
+    public Map<String, MenuItemMediaXref> getMenuItemMediaXref();
+
+    /**
+     * Sets a map of key/value pairs where the key is a string for the name of a media object and the value
+     * is a cross-reference object to type Media.
+     */
+    public void setMenuItemMediaXref(Map<String, MenuItemMediaXref> menuItemMedia);
 
     /**
      * Returns the {@link Menu} to which this menuItem belongs
@@ -179,4 +196,11 @@ public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
      */
     public String getDerivedLabel();
 
+    /**
+     * Convenience method that will always return the MenuItemType name.  Helpful if the MenuItemType
+     * has been overwritten.
+     *
+     * @return type
+     */
+    public String getMenuItemTypeName();
 }

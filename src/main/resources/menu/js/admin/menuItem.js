@@ -38,6 +38,7 @@
             var menuItemType = $("#fields\\'type\\'\\.value", $form).val()
 
             // Initialize relevant fields
+            var $menuItemMedia    = $form.find('#menuItemMedia');
             var $actionUrl        = $form.find('#field-actionUrl');
             var $image            = $form.find('#field-image');
             var $altText          = $form.find('#field-altText');
@@ -48,6 +49,7 @@
             var $customHtml       = $form.find('#field-customHtml');
 
             // Hide everything
+            $menuItemMedia.addClass('hidden');
             $actionUrl.addClass('hidden');
             $image.addClass('hidden');
             $altText.addClass('hidden');

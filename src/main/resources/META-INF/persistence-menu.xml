@@ -29,6 +29,7 @@
                 
         <class>org.broadleafcommerce.menu.domain.MenuImpl</class>
         <class>org.broadleafcommerce.menu.domain.MenuItemImpl</class>
+        <class>org.broadleafcommerce.menu.domain.MenuItemMediaXrefImpl</class>
         <exclude-unlisted-classes/>
     </persistence-unit>
 </persistence>

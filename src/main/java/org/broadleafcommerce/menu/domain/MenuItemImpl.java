@@ -29,9 +29,11 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTy
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
 import org.broadleafcommerce.common.media.domain.Media;
-import org.broadleafcommerce.common.media.domain.MediaImpl;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
+import org.broadleafcommerce.common.presentation.AdminPresentationMap;
+import org.broadleafcommerce.common.presentation.AdminPresentationMapField;
+import org.broadleafcommerce.common.presentation.AdminPresentationMapFields;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
@@ -43,6 +45,9 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,7 +59,10 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -111,12 +119,30 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             order = Presentation.FieldOrder.ACTION_URL)
     protected String actionUrl;
 
-    @ManyToOne(targetEntity = MediaImpl.class)
-    @JoinColumn(name = "MEDIA_ID")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Image",
-            fieldType = SupportedFieldType.MEDIA,
-            order = Presentation.FieldOrder.IMAGE_URL)
-    protected Media image;
+    @OneToMany(mappedBy = "menuItem", targetEntity = MenuItemMediaXrefImpl.class, cascade = { javax.persistence.CascadeType.ALL }, orphanRemoval = true)
+    @MapKey(name = "key")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
+    @AdminPresentationMap(friendlyName = "MenuItemImpl_Media",
+            keyPropertyFriendlyName = "MenuItemImpl_Media_Key",
+            deleteEntityUponRemove = true,
+            mediaField = "media.url",
+            toOneTargetProperty = "media",
+            toOneParentProperty = "menuItem",
+            forceFreeFormKeys = true
+    )
+    @AdminPresentationMapFields(
+            mapDisplayFields = {
+                    @AdminPresentationMapField(
+                            fieldName = "primary",
+                            fieldPresentation = @AdminPresentation(friendlyName = "MenuItemImpl_Image",
+                                    fieldType = SupportedFieldType.MEDIA,
+                                    order = Presentation.FieldOrder.IMAGE_URL)
+                    )
+            })
+    protected Map<String, MenuItemMediaXref> menuItemMedia = new HashMap<String, MenuItemMediaXref>();
+
+    @Transient
+    protected Map<String, Media> legacyMenuItemMedia = new HashMap<String, Media>();
 
     @Column(name = "ALT_TEXT")
     @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
@@ -187,13 +213,34 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     }
 
     @Override
-    public Media getImage() {
-        return image;
+    @Deprecated
+    public Map<String, Media> getMenuItemMedia() {
+        if (legacyMenuItemMedia.size() == 0) {
+            for (Map.Entry<String, MenuItemMediaXref> entry : getMenuItemMediaXref().entrySet()) {
+                legacyMenuItemMedia.put(entry.getKey(), entry.getValue().getMedia());
+            }
+        }
+        return Collections.unmodifiableMap(legacyMenuItemMedia);
     }
 
     @Override
-    public void setImage(Media image) {
-        this.image = image;
+    @Deprecated
+    public void setMenuItemMedia(Map<String, Media> menuItemMedia) {
+        this.menuItemMedia.clear();
+        this.legacyMenuItemMedia.clear();
+        for(Map.Entry<String, Media> entry : menuItemMedia.entrySet()){
+            this.menuItemMedia.put(entry.getKey(), new MenuItemMediaXrefImpl(this, entry.getValue(), entry.getKey()));
+        }
+    }
+
+    @Override
+    public Map<String, MenuItemMediaXref> getMenuItemMediaXref() {
+        return menuItemMedia;
+    }
+
+    @Override
+    public void setMenuItemMediaXref(Map<String, MenuItemMediaXref> menuItemMedia) {
+        this.menuItemMedia = menuItemMedia;
     }
 
     @Override
@@ -282,6 +329,11 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     }
 
     @Override
+    public String getMenuItemTypeName() {
+        return type;
+    }
+
+    @Override
     public <G extends MenuItem> CreateResponse<G> createOrRetrieveCopyInstance(MultiTenantCopyContext context) throws CloneNotSupportedException {
         CreateResponse<G> createResponse = context.createOrRetrieveCopyInstance(this);
         if (createResponse.isAlreadyPopulated()) {
@@ -295,8 +347,9 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             cloned.setParentMenu(parentMenu.createOrRetrieveCopyInstance(context).getClone());
         }
         cloned.setActionUrl(actionUrl);
-        if (image != null) {
-            cloned.setImage(((MediaImpl) image).createOrRetrieveCopyInstance(context).getClone());
+        for(Map.Entry<String, MenuItemMediaXref> entry : menuItemMedia.entrySet()){
+            MenuItemMediaXrefImpl clonedEntry = (MenuItemMediaXrefImpl) ((MenuItemMediaXrefImpl)entry.getValue()).createOrRetrieveCopyInstance(context).getClone();
+            cloned.getMenuItemMediaXref().put(entry.getKey(),clonedEntry);
         }
         cloned.setAltText(altText);
         if (linkedMenu != null) {

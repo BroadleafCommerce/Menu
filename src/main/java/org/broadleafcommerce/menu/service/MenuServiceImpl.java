@@ -80,6 +80,7 @@ public class MenuServiceImpl implements MenuService {
         if (MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()) &&
                 menuItem.getLinkedMenu() != null) {
             MenuItemDTO dto = new MenuItemDTO();
+            dto.setType(menuItem.getMenuItemTypeName());
             dto.setUrl(menuItem.getDerivedUrl());
             dto.setLabel(menuItem.getDerivedLabel());
 
@@ -97,10 +98,12 @@ public class MenuServiceImpl implements MenuService {
             return convertCategoryToMenuItemDTO(category);
         } else {
             MenuItemDTO dto = new MenuItemDTO();
+            dto.setType(menuItem.getMenuItemTypeName());
             dto.setUrl(menuItem.getDerivedUrl());
             dto.setLabel(menuItem.getDerivedLabel());
-            if (menuItem.getImage() != null) {
-                dto.setImageUrl(menuItem.getImage().getUrl());
+            dto.setCustomHtml(menuItem.getCustomHtml());
+            if (menuItem.getMenuItemMedia().size() > 0) {
+                dto.setImageUrl(menuItem.getMenuItemMedia().get("primary").getUrl());
                 dto.setAltText(menuItem.getAltText());
             }
             return dto;
