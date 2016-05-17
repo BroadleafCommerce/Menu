@@ -60,11 +60,6 @@
             <name>public snapshots</name>
             <url>http://www.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>framework-5-releases</id>
-            <name>framework-5-releases</name>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/framework-5-releases/</url>
-        </repository>
     </repositories>
     <build>
         <plugins>
