@@ -39,7 +39,7 @@
 
             // Initialize relevant fields
             var $actionUrl        = $form.find('#field-actionUrl');
-            var $image            = $form.find('#field-image');
+            var $image            = $form.find('#field-image--url');
             var $altText          = $form.find('#field-altText');
             var $linkedMenu       = $form.find('#field-linkedMenu');
             var $linkedCategory   = $form.find('#field-linkedCategory');
