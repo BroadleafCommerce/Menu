@@ -22,6 +22,7 @@ package org.broadleafcommerce.menu.admin.server.handler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.common.exception.ServiceException;
+import org.broadleafcommerce.common.presentation.client.OperationType;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
 import org.broadleafcommerce.menu.domain.MenuItem;
@@ -73,6 +74,16 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Boolean canHandleFetch(PersistencePackage persistencePackage) {
+        return canHandleInspect(persistencePackage);
+    }
+
+    @Override
+    public Boolean canHandleAdd(PersistencePackage persistencePackage) {
+        return canHandleInspect(persistencePackage);
+    }
+
+    @Override
+    public Boolean canHandleUpdate(PersistencePackage persistencePackage) {
         return canHandleInspect(persistencePackage);
     }
 
@@ -141,4 +152,22 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         return drs;
     }
 
+    @Override
+    public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper)
+            throws ServiceException {
+        Property url = persistencePackage.getEntity().findProperty("image.url");
+        if (url != null && url.getValue() == null) {
+            url.setValue("");
+        }
+        return helper.getCompatibleModule(OperationType.BASIC).add(persistencePackage);
+    }
+
+    @Override
+    public Entity update(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
+        Property url = persistencePackage.getEntity().findProperty("image.url");
+        if (url != null && url.getValue() == null) {
+            url.setValue("");
+        }
+        return helper.getCompatibleModule(OperationType.BASIC).update(persistencePackage);
+    }
 }
