@@ -19,6 +19,7 @@
  */
 package org.broadleafcommerce.menu.admin.server.handler;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.common.exception.ServiceException;
@@ -156,8 +157,8 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper)
             throws ServiceException {
         Property url = persistencePackage.getEntity().findProperty("image.url");
-        if (url != null && url.getValue() == null) {
-            url.setValue("");
+        if (url != null && StringUtils.isEmpty(url.getValue())) {
+            url.setValue(" ");
         }
         return helper.getCompatibleModule(OperationType.BASIC).add(persistencePackage);
     }
@@ -165,8 +166,8 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     @Override
     public Entity update(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
         Property url = persistencePackage.getEntity().findProperty("image.url");
-        if (url != null && url.getValue() == null) {
-            url.setValue("");
+        if (url != null && StringUtils.isEmpty(url.getValue())) {
+            url.setValue(" ");
         }
         return helper.getCompatibleModule(OperationType.BASIC).update(persistencePackage);
     }
