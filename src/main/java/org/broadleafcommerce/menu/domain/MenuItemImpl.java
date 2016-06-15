@@ -21,6 +21,7 @@ import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.cms.page.domain.PageImpl;
 import org.broadleafcommerce.common.copy.CreateResponse;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
+import org.broadleafcommerce.common.extensibility.jpa.clone.ClonePolicy;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
@@ -31,8 +32,13 @@ import org.broadleafcommerce.common.media.domain.MediaImpl;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
+import org.broadleafcommerce.common.presentation.PopulateToOneFieldsEnum;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
+import org.broadleafcommerce.common.presentation.override.AdminPresentationMergeEntry;
+import org.broadleafcommerce.common.presentation.override.AdminPresentationMergeOverride;
+import org.broadleafcommerce.common.presentation.override.AdminPresentationMergeOverrides;
+import org.broadleafcommerce.common.presentation.override.PropertyType;
 import org.broadleafcommerce.menu.type.MenuItemType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -58,7 +64,19 @@ import javax.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "BLC_CMS_MENU_ITEM")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
-@AdminPresentationClass(friendlyName = "MenuItemImpl")
+@AdminPresentationClass(friendlyName = "MenuItemImpl", populateToOneFields = PopulateToOneFieldsEnum.TRUE)
+@AdminPresentationMergeOverrides({
+        @AdminPresentationMergeOverride(name = "image.", mergeEntries =
+        @AdminPresentationMergeEntry(propertyType = PropertyType.AdminPresentation.EXCLUDED,
+                booleanOverrideValue = true)
+        ),
+        @AdminPresentationMergeOverride(name = "image.url", mergeEntries = {
+                @AdminPresentationMergeEntry(propertyType = PropertyType.AdminPresentation.EXCLUDED, booleanOverrideValue = false),
+                @AdminPresentationMergeEntry(propertyType = PropertyType.AdminPresentation.ORDER, intOverrideValue = MenuItemImpl.Presentation.FieldOrder.IMAGE_URL),
+                @AdminPresentationMergeEntry(propertyType = PropertyType.AdminPresentation.FRIENDLYNAME, overrideValue = "MenuItemImpl_Image"),
+                @AdminPresentationMergeEntry(propertyType = PropertyType.AdminPresentation.REQUIREDOVERRIDE, overrideValue = "NOT_REQUIRED")
+        })
+})
 @DirectCopyTransform({
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.SANDBOX, skipOverlaps = true),
         @DirectCopyTransformMember(templateTokens = DirectCopyTransformTypes.MULTITENANT_SITE)
@@ -102,6 +120,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
 
     @ManyToOne(optional = true, targetEntity = MenuImpl.class, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "PARENT_MENU_ID")
+    @AdminPresentation(excluded = true)
     protected Menu parentMenu;
 
     @Column(name = "ACTION_URL")
@@ -109,11 +128,9 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             order = Presentation.FieldOrder.ACTION_URL)
     protected String actionUrl;
 
-    @ManyToOne(targetEntity = MediaImpl.class)
+    @ManyToOne(targetEntity = MediaImpl.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "MEDIA_ID")
-    @AdminPresentation(friendlyName = "MenuItemImpl_Image",
-            fieldType = SupportedFieldType.MEDIA,
-            order = Presentation.FieldOrder.IMAGE_URL)
+    @ClonePolicy
     protected Media image;
 
     @Column(name = "ALT_TEXT")
