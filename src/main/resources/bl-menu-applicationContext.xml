@@ -46,29 +46,52 @@
     </bean>
     
     <!-- Generic Configuration -->
-    <bean id="blConfiguration" class="org.broadleafcommerce.common.config.RuntimeEnvironmentPropertiesConfigurer">
-        <property name="overridableProperyLocations">
+    <bean id="blPropertySources" class="org.springframework.beans.factory.config.SetFactoryBean">
+        <property name="sourceSet">
             <set>
                 <value>classpath:config/bc/menu/</value>
             </set>
         </property>
     </bean>
+
+    <!--<bean id="blOverridableProperyLocations-menu" class="org.springframework.beans.factory.config.SetFactoryBean">-->
+        <!--<property name="sourceSet">-->
+            <!--<set>-->
+                <!--<value>classpath:config/bc/menu/</value>-->
+            <!--</set>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean class="org.broadleafcommerce.common.extensibility.context.merge.EarlyStageMergeBeanPostProcessor">-->
+        <!--<property name="collectionRef" value="blOverridableProperyLocations-menu"/>-->
+        <!--<property name="targetRef" value="blOverridableProperyLocations"/>-->
+    <!--</bean>-->
     
-    <bean id="blMergedPersistenceXmlLocations" class="org.springframework.beans.factory.config.ListFactoryBean">
+    <bean id="blMergedPersistenceXmlLocations-menu" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath*:/META-INF/persistence-menu.xml</value>
             </list>
         </property>
     </bean>
+
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.EarlyStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMergedPersistenceXmlLocations-menu"/>
+        <property name="targetRef" value="blMergedPersistenceXmlLocations"/>
+    </bean>
     
-    <bean id="blMergedEntityContexts" class="org.springframework.beans.factory.config.ListFactoryBean">
+    <bean id="blMergedEntityContexts-menu" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath:bl-menu-applicationContext-entity.xml</value>
             </list>
         </property>
-    </bean>    
+    </bean>
+
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.EarlyStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMergedEntityContexts-menu"/>
+        <property name="targetRef" value="blMergedEntityContexts"/>
+    </bean>
 
     <bean p:order="2100" id="blMenuCopier" class="org.broadleafcommerce.menu.copy.MenuCopier" />
     <bean id="blMenuProfileSiteCopiers" class="org.springframework.beans.factory.config.ListFactoryBean">

@@ -35,12 +35,17 @@
         <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.web.*"/>
     </context:component-scan>
 
-    <bean id="messageSource" class="org.broadleafcommerce.common.util.BroadleafMergeResourceBundleMessageSource">
-        <property name="basenames">
+    <bean id="blMessageSourceBaseNames-menu" class="org.springframework.beans.factory.config.ListFactoryBean" scope="prototype">
+        <property name="sourceList">
             <list>
                 <value>classpath:/messages/Menu</value>
             </list>
         </property>
+    </bean>
+
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blMessageSourceBaseNames-menu" />
+        <property name="targetRef" value="blMessageSourceBaseNames" />
     </bean>
 
     <bean id="blMenuJsLocations" class="org.springframework.beans.factory.config.ListFactoryBean" >
@@ -50,6 +55,7 @@
             </list>
         </property>
     </bean>
+
     <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
         <property name="collectionRef" value="blMenuJsLocations" />
         <property name="targetRef" value="blJsLocations" />
@@ -62,17 +68,23 @@
             </list>
         </property>
     </bean>
+
     <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
         <property name="collectionRef" value="blMenuAdminJsFileList"/>
         <property name="targetRef" value="blJsFileList"/>
     </bean>
 
-    <bean id="blCustomPersistenceHandlers" class="org.springframework.beans.factory.config.ListFactoryBean" scope="prototype">
+    <bean id="blCustomPersistenceHandlers-menu" class="org.springframework.beans.factory.config.ListFactoryBean" scope="prototype">
         <property name="sourceList">
             <list>
                 <ref bean="blMenuItemCustomPersistenceHandler"/>
             </list>
         </property>
+    </bean>
+
+    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
+        <property name="collectionRef" value="blCustomPersistenceHandlers-menu"/>
+        <property name="targetRef" value="blCustomPersistenceHandlers"/>
     </bean>
 
 </beans>
