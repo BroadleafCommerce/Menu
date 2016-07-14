@@ -19,8 +19,9 @@ package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.common.extension.AbstractExtensionHandler;
 import org.broadleafcommerce.common.extension.ExtensionResultStatusType;
-import org.thymeleaf.Arguments;
-import org.thymeleaf.dom.Element;
+import org.broadleafcommerce.common.web.domain.BroadleafTemplateContext;
+
+import java.util.Map;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -29,7 +30,7 @@ public abstract class AbstractMenuProcessorExtensionHandler extends AbstractExte
         implements MenuProcessorExtensionHandler {
 
     @Override
-    public ExtensionResultStatusType addAdditionalFieldsToModel(Arguments arguments, Element element) {
+    public ExtensionResultStatusType addAdditionalFieldsToModel(String tagName, Map<String, String> tagAttributes, Map<String, Object> newModelVars, BroadleafTemplateContext context) {
         return ExtensionResultStatusType.NOT_HANDLED;
     }
 

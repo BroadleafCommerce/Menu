@@ -15,12 +15,14 @@
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
  */
+
 package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.common.extension.ExtensionHandler;
 import org.broadleafcommerce.common.extension.ExtensionResultStatusType;
-import org.thymeleaf.Arguments;
-import org.thymeleaf.dom.Element;
+import org.broadleafcommerce.common.web.domain.BroadleafTemplateContext;
+
+import java.util.Map;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -30,10 +32,8 @@ public interface MenuProcessorExtensionHandler extends ExtensionHandler {
     /**
      * This method will add any additional attributes to the model that the extension needs
      *
-     * @param arguments - the Thymeleaf Processor arguments
-     * @param element - the Thymeleaf Processor element
      * @return - ExtensionResultStatusType
      */
-    public ExtensionResultStatusType addAdditionalFieldsToModel(Arguments arguments, Element element);
+    public ExtensionResultStatusType addAdditionalFieldsToModel(String tagName, Map<String, String> tagAttributes, Map<String, Object> newModelVars, BroadleafTemplateContext context);
 
 }

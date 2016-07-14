@@ -34,21 +34,6 @@
     <context:component-scan base-package="org.broadleafcommerce.menu">
         <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.*"/>
     </context:component-scan>
-    
-    <!-- Thymeleaf Config -->
-    <bean id="blDialectMenuProcessors" class="org.springframework.beans.factory.config.SetFactoryBean">
-        <property name="sourceSet">
-            <set>
-                <ref bean="blMenuProcessor"/>                      
-            </set>
-        </property>
-    </bean>
-    
-    <bean class="org.broadleafcommerce.common.extensibility.context.merge.LateStageMergeBeanPostProcessor">
-        <property name="collectionRef" value="blDialectMenuProcessors" />
-        <property name="targetRef" value="blDialectProcessors" />
-    </bean>    
-
 
     <!--  Add New TranslatedEntity Types -->
     <bean class="org.broadleafcommerce.common.i18n.domain.TranslatedEntity">
