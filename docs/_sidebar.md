@@ -1,3 +1,4 @@
 - [[Home | .]]
 - [[Module Installation]]
 - [[Data Model]]
+- [[Release Notes]]
