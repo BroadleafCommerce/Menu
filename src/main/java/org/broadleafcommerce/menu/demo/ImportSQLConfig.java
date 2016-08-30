@@ -21,6 +21,7 @@ import org.broadleafcommerce.common.demo.AutoImportPersistenceUnit;
 import org.broadleafcommerce.common.demo.AutoImportSql;
 import org.broadleafcommerce.common.demo.AutoImportStage;
 import org.broadleafcommerce.common.demo.DemoCondition;
+import org.broadleafcommerce.common.demo.ImportCondition;
 import org.broadleafcommerce.common.demo.MTCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
@@ -30,26 +31,29 @@ import org.springframework.context.annotation.Configuration;
  * @author Jeff Fischer
  */
 @Configuration("blMenuData")
-@Conditional(DemoCondition.class)
+@Conditional(ImportCondition.class)
 public class ImportSQLConfig {
 
     @Bean
-    @Conditional(MTCondition.class)
+    @Conditional({MTCondition.class, DemoCondition.class})
     public AutoImportSql blMenuLateData() {
         return new AutoImportSql(AutoImportPersistenceUnit.BL_PU,"config/bc/sql/demo/fix_menu_data.sql", AutoImportStage.PRIMARY_LATE);
     }
 
     @Bean
+    @Conditional(DemoCondition.class)
     public AutoImportSql blMenuSecurity() {
         return new AutoImportSql(AutoImportPersistenceUnit.BL_PU,"config/bc/sql/load_menu_admin_security.sql", AutoImportStage.PRIMARY_MODULE_SECURITY);
     }
 
     @Bean
+    @Conditional(DemoCondition.class)
     public AutoImportSql blMenuBasicData() {
         return new AutoImportSql(AutoImportPersistenceUnit.BL_PU,"config/bc/sql/demo/load_menu_data.sql", AutoImportStage.PRIMARY_BASIC_DATA);
     }
 
     @Bean
+    @Conditional(DemoCondition.class)
     public AutoImportSql blMenuSequenceData() {
         return new AutoImportSql(AutoImportPersistenceUnit.ALL,"config/bc/sql/demo/load_menu_table_sequences.sql", AutoImportStage.ALL_TABLE_SEQUENCE);
     }
