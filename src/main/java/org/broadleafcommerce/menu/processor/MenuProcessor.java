@@ -18,10 +18,12 @@
 
 package org.broadleafcommerce.menu.processor;
 
+import org.broadleafcommerce.common.web.condition.TemplatingExistCondition;
 import org.broadleafcommerce.common.web.dialect.AbstractBroadleafModelVariableModifierProcessor;
 import org.broadleafcommerce.common.web.domain.BroadleafTemplateContext;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.service.MenuService;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -38,6 +40,7 @@ import javax.annotation.Resource;
  * @author bpolster
  */
 @Component("blMenuProcessor")
+@Conditional(TemplatingExistCondition.class)
 public class MenuProcessor extends AbstractBroadleafModelVariableModifierProcessor {
 
     @Resource(name = "blMenuService")
