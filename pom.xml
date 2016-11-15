@@ -121,7 +121,6 @@
             <type>jar</type>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-contentmanagement-module</artifactId>
