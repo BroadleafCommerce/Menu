@@ -18,14 +18,15 @@
 
 package org.broadleafcommerce.menu.processor;
 
-import org.broadleafcommerce.common.web.condition.TemplatingExistCondition;
-import org.broadleafcommerce.common.web.dialect.AbstractBroadleafModelVariableModifierProcessor;
-import org.broadleafcommerce.common.web.domain.BroadleafTemplateContext;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.service.MenuService;
+import org.broadleafcommerce.presentation.condition.TemplatingExistCondition;
+import org.broadleafcommerce.presentation.dialect.AbstractBroadleafVariableModifierProcessor;
+import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -41,7 +42,7 @@ import javax.annotation.Resource;
  */
 @Component("blMenuProcessor")
 @Conditional(TemplatingExistCondition.class)
-public class MenuProcessor extends AbstractBroadleafModelVariableModifierProcessor {
+public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
@@ -60,7 +61,7 @@ public class MenuProcessor extends AbstractBroadleafModelVariableModifierProcess
     }
 
     @Override
-    public void populateModelVariables(String tagName, Map<String, String> tagAttributes, Map<String, Object> newModelVars, BroadleafTemplateContext context) {
+    public Map<String, Object> populateModelVariables(String tagName, Map<String, String> tagAttributes, BroadleafTemplateContext context) {
         String resultVar = tagAttributes.get("resultVar");
         String menuName = tagAttributes.get("menuName");
         String menuId = tagAttributes.get("menuId");
@@ -73,9 +74,11 @@ public class MenuProcessor extends AbstractBroadleafModelVariableModifierProcess
             menu = menuService.findMenuByName(menuName);
         }
 
+        Map<String, Object> newModelVars = new HashMap<>();
         if (menu != null) {
             newModelVars.put(resultVar, menuService.constructMenuItemDTOsForMenu(menu));
             extensionManager.getProxy().addAdditionalFieldsToModel(tagName, tagAttributes, newModelVars, context);
         }
+        return newModelVars;
     }
 }
