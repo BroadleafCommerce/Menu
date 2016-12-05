@@ -19,15 +19,14 @@
 package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.common.extension.ExtensionManager;
-import org.broadleafcommerce.presentation.condition.TemplatingExistCondition;
-import org.springframework.context.annotation.Conditional;
+import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Elbert Bautista (elbertbautista)
  */
 @Service("blMenuProcessorExtensionManager")
-@Conditional(TemplatingExistCondition.class)
+@ConditionalOnTemplating
 public class MenuProcessorExtensionManager extends ExtensionManager<MenuProcessorExtensionHandler> {
 
     public MenuProcessorExtensionManager() {
