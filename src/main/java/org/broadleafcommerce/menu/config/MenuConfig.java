@@ -15,17 +15,22 @@
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
  */
-package org.broadleafcommerce.bootstrap.menu;
+package org.broadleafcommerce.menu.config;
 
-import org.broadleafcommerce.bootstrap.AbstractBroadleafConfigEnvironmentPostProcessor;
+import org.broadleafcommerce.common.config.FrameworkCommonPropertySource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Jeff Fischer
  */
-public class BroadleafConfigEnvironmentPostProcessor extends AbstractBroadleafConfigEnvironmentPostProcessor {
-
-    @Override
-    protected String getConfigLocation() {
-        return "config/bc/menu/";
+@Configuration
+public class MenuConfig {
+    
+    
+    @Bean
+    public static FrameworkCommonPropertySource blMenuProperties() {
+        return new FrameworkCommonPropertySource("config/bc/menu/");
     }
+    
 }
