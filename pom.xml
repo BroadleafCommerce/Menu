@@ -14,7 +14,7 @@
     <version>2.2.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>5.2.0-SNAPSHOT</blc.version>
+        <broadleaf.bom.version>5.2.0-SNAPSHOT</broadleaf.bom.version>
         <project.uri>${project.baseUri}</project.uri>
         <attachSources>false</attachSources>
     </properties>
@@ -112,11 +112,21 @@
             </distributionManagement>
         </profile>
     </profiles>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.broadleafcommerce</groupId>
+                <artifactId>broadleaf-enterprise-bom</artifactId>
+                <version>${broadleaf.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-framework</artifactId>
-            <version>${blc.version}</version>
             <scope>compile</scope>
             <type>jar</type>
             <optional>true</optional>
@@ -124,12 +134,10 @@
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-contentmanagement-module</artifactId>
-            <version>${blc.version}</version>
             <scope>compile</scope>
             <type>jar</type>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -137,15 +145,5 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
-
-        <!-- Logging -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.12</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 </project>
