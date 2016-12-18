@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=org.broadleafcommerce.menu.config.MenuConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.broadleafcommerce.menu.config.MenuConfig
