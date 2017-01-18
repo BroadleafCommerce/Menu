@@ -35,7 +35,7 @@
         <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.web.*"/>
     </context:component-scan>
 
-    <bean id="blMessageSourceBaseNames-menu" class="org.springframework.beans.factory.config.ListFactoryBean" scope="prototype">
+    <bean id="blMessageSourceBaseNames-menu" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
                 <value>classpath:/messages/Menu</value>

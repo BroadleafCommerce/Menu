@@ -45,28 +45,6 @@
         <constructor-arg index="1" value="MenuItem"/>
     </bean>
     
-    <!-- Generic Configuration -->
-    <bean id="blPropertySources" class="org.springframework.beans.factory.config.SetFactoryBean">
-        <property name="sourceSet">
-            <set>
-                <value>classpath:config/bc/menu/</value>
-            </set>
-        </property>
-    </bean>
-
-    <!--<bean id="blOverridableProperyLocations-menu" class="org.springframework.beans.factory.config.SetFactoryBean">-->
-        <!--<property name="sourceSet">-->
-            <!--<set>-->
-                <!--<value>classpath:config/bc/menu/</value>-->
-            <!--</set>-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!--<bean class="org.broadleafcommerce.common.extensibility.context.merge.EarlyStageMergeBeanPostProcessor">-->
-        <!--<property name="collectionRef" value="blOverridableProperyLocations-menu"/>-->
-        <!--<property name="targetRef" value="blOverridableProperyLocations"/>-->
-    <!--</bean>-->
-    
     <bean id="blMergedPersistenceXmlLocations-menu" class="org.springframework.beans.factory.config.ListFactoryBean">
         <property name="sourceList">
             <list>
