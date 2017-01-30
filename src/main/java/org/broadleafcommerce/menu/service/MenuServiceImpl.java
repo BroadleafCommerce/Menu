@@ -62,19 +62,18 @@ public class MenuServiceImpl implements MenuService {
         List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
         if (CollectionUtils.isNotEmpty(menu.getMenuItems())) {
             for (MenuItem menuItem : menu.getMenuItems()) {
-                dtos.add(convertMenuItemToDTO(menuItem));
+                MenuItemDTO menuItemDTO = convertMenuItemToDTO(menuItem);
+
+                if (menuItemDTO != null) {
+                    dtos.add(menuItemDTO);
+                }
+
             }
         }
         return dtos;
     }
 
     protected MenuItemDTO convertMenuItemToDTO(MenuItem menuItem) {
-
-        Category category = null;
-        if (MenuItemType.CATEGORY.equals(menuItem.getMenuItemType())) {
-            category = catalogService.findCategoryByURI(menuItem.getActionUrl());
-        }
-
         if (MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()) &&
                 menuItem.getLinkedMenu() != null) {
             MenuItemDTO dto = new MenuItemDTO();
@@ -91,8 +90,14 @@ public class MenuServiceImpl implements MenuService {
 
             dto.setSubmenu(submenu);
             return dto;
-        } else if (category != null) {
-            return convertCategoryToMenuItemDTO(category);
+        } else if (MenuItemType.CATEGORY.equals(menuItem.getMenuItemType())) {
+            Category category = catalogService.findCategoryByURI(menuItem.getActionUrl());
+
+            if (category != null) {
+                return convertCategoryToMenuItemDTO(category);
+            } else {
+                return null;
+            }
         } else {
             MenuItemDTO dto = new MenuItemDTO();
             dto.setUrl(menuItem.getDerivedUrl());
