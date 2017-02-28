@@ -25,11 +25,6 @@
 
     <!-- All non-weave related configuration for this module belongs here -->
 
-    <bean class="org.broadleafcommerce.common.logging.ModuleLifecycleLoggingBean">
-        <property name="moduleName" value="Menu" />
-        <property name="lifeCycleEvent" value="LOADING" />
-    </bean>
-
     <!-- Scan the module -->
     <context:component-scan base-package="org.broadleafcommerce.menu">
         <context:exclude-filter type="regex" expression="org.broadleafcommerce.menu.admin.*"/>
