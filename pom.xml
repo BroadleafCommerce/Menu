@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>2.0.2-GA</version>
+        <version>2.0.5-GA</version>
     </parent>
 
     <groupId>org.broadleafcommerce</groupId>
@@ -13,8 +13,8 @@
     <description>BroadleafCommerce Menu</description>
     <version>2.2.0-SNAPSHOT</version>
     <properties>
+        <blc.version>5.2.0-SNAPSHOT</blc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <broadleaf.bom.version>5.2.0-SNAPSHOT</broadleaf.bom.version>
         <project.uri>${project.baseUri}</project.uri>
         <attachSources>false</attachSources>
     </properties>
@@ -70,14 +70,6 @@
                     <licenseName>blc_dual</licenseName>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
 
@@ -112,32 +104,20 @@
             </distributionManagement>
         </profile>
     </profiles>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.broadleafcommerce</groupId>
-                <artifactId>broadleaf-enterprise-bom</artifactId>
-                <version>${broadleaf.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
+        <!-- Required -->
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-framework</artifactId>
-            <scope>compile</scope>
-            <type>jar</type>
-            <optional>true</optional>
+            <version>${blc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
             <artifactId>broadleaf-contentmanagement-module</artifactId>
-            <scope>compile</scope>
-            <type>jar</type>
-            <optional>true</optional>
+            <version>${blc.version}</version>
         </dependency>
+        
+        <!-- Required but provided -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
