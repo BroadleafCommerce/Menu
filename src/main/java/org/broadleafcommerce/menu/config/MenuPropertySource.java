@@ -1,8 +1,8 @@
-/*
+/*-
  * #%L
- * BroadleafCommerce Admin Module
+ * BroadleafCommerce Menu
  * %%
- * Copyright (C) 2009 - 2016 Broadleaf Commerce
+ * Copyright (C) 2009 - 2017 Broadleaf Commerce
  * %%
  * Licensed under the Broadleaf Fair Use License Agreement, Version 1.0
  * (the "Fair Use License" located  at http://license.broadleafcommerce.org/fair_use_license-1.0.txt)
@@ -17,20 +17,15 @@
  */
 package org.broadleafcommerce.menu.config;
 
-import org.broadleafcommerce.common.logging.LifeCycleEvent;
-import org.broadleafcommerce.common.logging.ModuleLifecycleLoggingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.broadleafcommerce.common.config.DefaultOrderFrameworkCommonClasspathPropertySource;
 
 /**
- * @author Jeff Fischer
+ * @author Philip Baggett (pbaggett)
  */
-@Configuration
-public class MenuConfig {
-    
-    @Bean
-    public ModuleLifecycleLoggingBean blMenuLifecycle() {
-        return new ModuleLifecycleLoggingBean(MenuModuleRegistration.MODULE_NAME, LifeCycleEvent.LOADING);
+public class MenuPropertySource extends DefaultOrderFrameworkCommonClasspathPropertySource {
+
+    @Override
+    public String getClasspathFolder() {
+        return "config/bc/menu/";
     }
-    
 }
