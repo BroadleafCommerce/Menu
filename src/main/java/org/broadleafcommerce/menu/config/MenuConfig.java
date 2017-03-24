@@ -17,6 +17,7 @@
  */
 package org.broadleafcommerce.menu.config;
 
+import org.broadleafcommerce.common.config.FrameworkCommonPropertySource;
 import org.broadleafcommerce.common.logging.LifeCycleEvent;
 import org.broadleafcommerce.common.logging.ModuleLifecycleLoggingBean;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class MenuConfig {
+    
+    @Bean
+    public static FrameworkCommonPropertySource blMenuProperties() {
+        return new FrameworkCommonPropertySource("config/bc/menu/");
+    }
     
     @Bean
     public ModuleLifecycleLoggingBean blMenuLifecycle() {
