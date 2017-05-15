@@ -10,6 +10,6 @@ different types: "Link", "Category", "Page", "Submenu", "Product", or "Custom"
 
 ## Initial Configuration
 
-The `1.0.0-GA` version of the Menu module requires Broadleaf version `3.2.0-GA` or later.
+The `2.2.0-GA` version of the Menu module requires Broadleaf version `5.2.0-GA` or later.
 
 For detailed instructions on how to integrate the content test module into your project, see [[Module Installation]].

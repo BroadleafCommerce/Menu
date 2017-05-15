@@ -1,31 +1,17 @@
-Steps to enable this module in your custom Broadleaf Commerce project. These steps are based on projects that are
-similar to the Broadleaf Commerce demo application which contains a core, site, and admin project which are all contained in a "parent project".
-
-> Note: that the 3.2 version of the demo application already has this menu module included.
+Steps to enable this module in your custom Broadleaf Commerce project
 
 ## Steps
 
-**Step 1.** Add the following to the dependency management section of your **parent** `pom.xml`:
-_The parent pom is the one located in the root directory of the Broadleaf Commerce project._
+**Step 1** Pull this dependency into your `core/pom.xml`:
 
 ```xml
-    <dependency>
-        <groupId>org.broadleafcommerce</groupId>
-        <artifactId>broadleaf-menu</artifactId>
-        <version>1.0.0-GA</version>
-        <type>jar</type>
-        <scope>compile</scope>
-    </dependency>
+<dependency>
+    <groupId>org.broadleafcommerce</groupId>
+    <artifactId>broadleaf-menu</artifactId>
+</dependency>
 ```
 
-**Step 2.** Pull this dependency into your `core/pom.xml`:
-
-```xml
-    <dependency>
-        <groupId>org.broadleafcommerce</groupId>
-        <artifactId>broadleaf-menu</artifactId>
-    </dependency>
-```
+> This assumes that you are using the Broadlef BOM that pins all version information. If not, you will need to also add a `<version>` qualifier
 
 ## Data Changes
 
@@ -52,19 +38,19 @@ If you are using the Heat Clinic demo as a starting point. You can utilize the n
 Add something like the following to your `nav.html` file:
 
 ```html
-    <blc:menu resultVar="menuItems" menuName="Header Nav" />
-    <ul th:if="${menuItems}">
-        <li th:each="menuItem : ${menuItems}">
+<blc:menu resultVar="menuItems" menuName="Header Nav" />
+<ul th:if="${menuItems}">
+    <li th:each="menuItem : ${menuItems}">
 
-            <a th:href="@{${menuItem.url}}" th:class="${menuItemStat.first}? 'home'">
-                <span th:text="${menuItem.label}"></span>
-            </a>
-            <ul th:if="${menuItem.submenu != null}" class="sub-menu">
-                <li th:each="submenuItem : ${menuItem.submenu}">
-                    <a th:href="@{${submenuItem.url}}" th:text="${submenuItem.label}"></a>
-                </li>
-            </ul>
+        <a th:href="@{${menuItem.url}}" th:class="${menuItemStat.first}? 'home'">
+            <span th:text="${menuItem.label}"></span>
+        </a>
+        <ul th:if="${menuItem.submenu != null}" class="sub-menu">
+            <li th:each="submenuItem : ${menuItem.submenu}">
+                <a th:href="@{${submenuItem.url}}" th:text="${submenuItem.label}"></a>
+            </li>
+        </ul>
 
-        </li>
-    </ul>
+    </li>
+</ul>
 ```
