@@ -17,7 +17,8 @@
  */
 package org.broadleafcommerce.menu.service;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.broadleafcommerce.core.catalog.domain.Category;
 import org.broadleafcommerce.core.catalog.domain.CategoryXref;
 import org.broadleafcommerce.core.catalog.service.CatalogService;
@@ -29,7 +30,9 @@ import org.broadleafcommerce.menu.type.MenuItemType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -110,24 +113,38 @@ public class MenuServiceImpl implements MenuService {
         }
 
     }
+    
+    protected MenuItemDTO convertCategoryToMenuItemDTO(final Category category) {
+        Set<Category> convertedCategories = new HashSet<>();
+        return convertCategoryToMenuItemDTO(category, convertedCategories);
+    }
+    
+    protected MenuItemDTO convertCategoryToMenuItemDTO(final Category category, Set<Category> convertedCategories) {
+        MenuItemDTO dto = createDto(category);
+        List<CategoryXref> childXrefs = ListUtils.emptyIfNull(category.getChildCategoryXrefs());
+        List<MenuItemDTO> submenu = new ArrayList<>();
 
-    protected MenuItemDTO convertCategoryToMenuItemDTO(Category category) {
+        convertedCategories.add(category);
+        
+        for (CategoryXref childXref : childXrefs) {
+            final Category childCategory = childXref.getSubCategory();
+            
+            if (!convertedCategories.contains(childCategory)) {
+                submenu.add(convertCategoryToMenuItemDTO(childCategory, convertedCategories));
+            }
+        }
+        
+        dto.setSubmenu(submenu);
+        
+        return dto;
+    }
+    
+    protected MenuItemDTO createDto(Category category) {
         MenuItemDTO dto = new MenuItemDTO();
         dto.setLabel(category.getName());
         dto.setUrl(category.getUrl());
         dto.setCategoryId(category.getId());
-
-        List<CategoryXref> categoryXrefs = category.getChildCategoryXrefs();
-
-        if (CollectionUtils.isNotEmpty(categoryXrefs)) {
-            List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
-            for (CategoryXref xref : categoryXrefs) {
-                submenu.add(convertCategoryToMenuItemDTO(xref.getSubCategory()));
-            }
-
-            dto.setSubmenu(submenu);
-        }
+        
         return dto;
     }
-
 }
