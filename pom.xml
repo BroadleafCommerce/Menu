@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>1.0.10-GA</version>
+        <version>1.0.14-GA</version>
     </parent>
 
     <groupId>org.broadleafcommerce</groupId>
@@ -16,7 +16,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <blc.version>5.0.0-GA</blc.version>
         <project.uri>${project.baseUri}</project.uri>
-        <attachSources>false</attachSources>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
@@ -61,25 +60,6 @@
             <url>http://www.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <licenseName>blc_dual</licenseName>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
     <distributionManagement>
         <snapshotRepository>
@@ -91,27 +71,6 @@
             <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
         </repository>
     </distributionManagement>
-    <profiles>
-        <profile>
-            <id>sources</id>
-            <activation>
-                <property>
-                    <name>attachSources</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>snapshots</id>
-                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-source-snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>releases</id>
-                    <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-source-releases/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
     <dependencies>
         <dependency>
             <groupId>org.broadleafcommerce</groupId>
