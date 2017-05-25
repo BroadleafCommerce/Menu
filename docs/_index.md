@@ -8,8 +8,6 @@ terms of Menus in the Admin much easier.
 This module provides a Thymeleaf MenuProcessor that will add a list of MenuItemDTOs to the model. A Menu can contain Menu Items of
 different types: "Link", "Category", "Page", "Submenu", "Product", or "Custom"
 
-## Initial Configuration
+## Module Installation
 
-The `2.2.0-GA` version of the Menu module requires Broadleaf version `5.2.0-GA` or later.
-
-For detailed instructions on how to integrate the content test module into your project, see [[Module Installation]].
+For detailed instructions on how to integrate the Menu module into your project, see [[Module Installation]].
