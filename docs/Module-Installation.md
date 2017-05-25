@@ -35,11 +35,9 @@ This file is automatically included if you have set `blPU.hibernate.hbm2ddl.auto
 ```xml
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-
     <changeSet author="broadleaf" id="some-unique-id">
 	    <sqlFile path="config/bc/sql/load_menu_admin_security.sql" encoding="utf8" stripComments="true" />
     </changeSet>
-
 </databaseChangeLog>
 ```
 
