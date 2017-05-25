@@ -26,10 +26,28 @@ To add all of the necessary database tables and columns for this module, please 
 The data in the following SQL file is required to establish Admin sections and permissions for this module:
 
 ```
-    /config/bc/sql/load_menu_admin_security.sql
+classpath:/config/bc/sql/load_menu_admin_security.sql
 ```
 
-> If you are creating the database using `blPU.hibernate.hbm2ddl.auto=create`, then you must ensure that you have set `import.sql.enabled=true` as well. If not, then you will need to run the SQL in the above file against your database to setup the proper Admin permissions.
+This file is automatically included if you have set `blPU.hibernate.hbm2ddl.auto=create` and you have not set `import.sql.enabled=false` in your properties files. If you are not using Hibernate's auto DDL process and are using Liquibase, you can add a new `changeSet` that references this file:
+
+
+```xml
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet author="broadleaf" id="some-unique-id">
+	    <sqlFile path="config/bc/sql/load_menu_admin_security.sql" encoding="utf8" stripComments="true" />
+    </changeSet>
+
+</databaseChangeLog>
+```
+
+Finally, you can unpack the downloaded `.jar` file and look at the files in the `config/bc/sql` folder to execute this sql manually.
+
+### Demo Data
+
+Demo data that sets up a menu structure based on categories is included in `/config/bc/sql/demo`. 
 
 ## View Changes
 
