@@ -45,7 +45,7 @@ Finally, you can unpack the downloaded `.jar` file and look at the files in the 
 
 ### Demo Data
 
-Demo data that sets up a menu structure based on categories is included in `/config/bc/sql/demo`. 
+Demo data that sets up a menu structure based on categories is included in `classpath:/config/bc/sql/demo`. 
 
 ## View Changes
 
