@@ -1,3 +1,5 @@
+# Module Installation
+
 Steps to enable this module in your custom Broadleaf Commerce project
 
 ## Steps
@@ -11,26 +13,23 @@ Steps to enable this module in your custom Broadleaf Commerce project
 </dependency>
 ```
 
-> This assumes that you are using the Broadlef BOM that pins all version information. If not, you will need to also add a `<version>` qualifier
+> This assumes that you are using the Broadleaf BOM that pins all version information. If not, you will need to also add a `<version>` qualifier
 
 ## Data Changes
 
 ### Schema Changes
 
-If you are allowing hibernate to create and modify your tables, this will be done automatically when you restart with the new configuration settings.
-
-Otherwise, you will need to generate the SQL to customize your Broadleaf implementation. See the [Broadleaf Schema Upgrade Documentation](http://docs.broadleafcommerce.org/core/current/broadleaf-data-upgrade-process) for details.
+To add all of the necessary database tables and columns for this module, please follow the [Liquibase update documentation](https://www.broadleafcommerce.com/docs/core/current/appendix/managing-db-versions-migrations-with-liquibase).
 
 ### Admin Security Changes
 
-To create the Menu management section in the Broadleaf admin, you will need to load new permissions. The recommended changes are located in the following files:
+The data in the following SQL file is required to establish Admin sections and permissions for this module:
 
 ```
-/config/bc/sql/load_menu_admin_security.sql
+    /config/bc/sql/load_menu_admin_security.sql
 ```
 
-> Note: In development, you can automatically load this SQL files by adding it to the blPU.hibernate.hbm2ddl.import\_files property in the development-shared.properties file.
-
+> If you are creating the database using `blPU.hibernate.hbm2ddl.auto=create`, then you must ensure that you have set `import.sql.enabled=true` as well. If not, then you will need to run the SQL in the above file against your database to setup the proper Admin permissions.
 
 ## View Changes
 
