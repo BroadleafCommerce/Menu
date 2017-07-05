@@ -18,17 +18,22 @@
 
 package org.broadleafcommerce.menu.processor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.menu.domain.Menu;
+import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.service.MenuService;
 import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
 import org.broadleafcommerce.presentation.dialect.AbstractBroadleafVariableModifierProcessor;
 import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Resource;
 
 /**
  * A Thymeleaf processor that will add a list of MenuItemDTOs to the model.
@@ -42,6 +47,8 @@ import javax.annotation.Resource;
 @Component("blMenuProcessor")
 @ConditionalOnTemplating
 public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
+
+    private final static Log LOG = LogFactory.getLog(MenuProcessor.class);
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
@@ -77,7 +84,29 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
         if (menu != null) {
             newModelVars.put(resultVar, menuService.constructMenuItemDTOsForMenu(menu));
             extensionManager.getProxy().addAdditionalFieldsToModel(tagName, tagAttributes, newModelVars, context);
+
+            //Add linked data as attribute
+            JSONArray schemaObjects = new JSONArray();
+            try {
+                for(MenuItem menuItem : menu.getMenuItems()) {
+                    JSONObject navElement = new JSONObject();
+                    navElement.put("@context", "http://schema.org/");
+                    navElement.put("@type", "SiteNavigationElement");
+                    navElement.put("url", menuItem.getActionUrl());
+                    navElement.put("name", menuItem.getLabel());
+                    schemaObjects.put(navElement);
+                }
+            } catch (JSONException je) {
+                LOG.warn("A JSON error occurred while generating linked data for menu items", je);
+            }
+
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<script type=\"application/ld+json\">\n");
+            buffer.append(schemaObjects.toString());
+            buffer.append("\n</script>");
+            newModelVars.put("menuLinkedData", buffer.toString());
         }
+
         return newModelVars;
     }
 }
