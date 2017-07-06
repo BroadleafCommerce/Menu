@@ -18,8 +18,6 @@
 
 package org.broadleafcommerce.menu.processor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.service.LinkedDataService;
 import org.broadleafcommerce.menu.service.MenuService;
@@ -44,8 +42,6 @@ import java.util.Map;
 @Component("blMenuProcessor")
 @ConditionalOnTemplating
 public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
-
-    private final static Log LOG = LogFactory.getLog(MenuProcessor.class);
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
