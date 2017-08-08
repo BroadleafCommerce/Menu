@@ -19,20 +19,20 @@
 package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.menu.domain.Menu;
+import org.broadleafcommerce.menu.service.LinkedDataService;
 import org.broadleafcommerce.menu.service.MenuService;
 import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
 import org.broadleafcommerce.presentation.dialect.AbstractBroadleafVariableModifierProcessor;
 import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 /**
  * A Thymeleaf processor that will add a list of MenuItemDTOs to the model.
- * 
+ *
  * It accepts a menuName or menuId. The precedence is that a menuId
  * will honored first, followed by a menuName.
  * An extension manager may override the resulting menu if configured to do so.
@@ -46,6 +46,9 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
     @Resource(name = "blMenuService")
     protected MenuService menuService;
 
+    @Resource(name = "blMenuLinkedDataService")
+    protected LinkedDataService linkedDataService;
+
     @Resource(name = "blMenuProcessorExtensionManager")
     protected MenuProcessorExtensionManager extensionManager;
 
@@ -53,7 +56,7 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
     public String getName() {
         return "menu";
     }
-    
+
     @Override
     public int getPrecedence() {
         return 1000;
@@ -77,7 +80,10 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
         if (menu != null) {
             newModelVars.put(resultVar, menuService.constructMenuItemDTOsForMenu(menu));
             extensionManager.getProxy().addAdditionalFieldsToModel(tagName, tagAttributes, newModelVars, context);
+
+            newModelVars.put("menuLinkedData", linkedDataService.getLinkedData(menu));
         }
+
         return newModelVars;
     }
 }
