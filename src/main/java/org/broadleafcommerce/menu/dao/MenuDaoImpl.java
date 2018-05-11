@@ -10,28 +10,30 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
  */
 package org.broadleafcommerce.menu.dao;
 
+import org.broadleafcommerce.common.persistence.HibernateBridgingQueryHints;
 import org.broadleafcommerce.common.util.dao.TypedQueryBuilder;
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuImpl;
 import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.domain.MenuItemImpl;
-import org.hibernate.ejb.QueryHints;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 @Repository("blMenuDao")
 public class MenuDaoImpl implements MenuDao {
-    
+
     @PersistenceContext(unitName = "blPU")
     protected EntityManager em;
 
@@ -63,8 +65,8 @@ public class MenuDaoImpl implements MenuDao {
     public Menu readMenuByName(String menuName) {
         TypedQuery<Menu> query = em.createNamedQuery("BC_READ_MENU_BY_NAME", Menu.class);
         query.setParameter("menuName", menuName);
-        query.setHint(QueryHints.HINT_CACHEABLE, true);
-        query.setHint(QueryHints.HINT_CACHE_REGION, "query.Cms");
+        query.setHint(HibernateBridgingQueryHints.CACHEABLE, true);
+        query.setHint(HibernateBridgingQueryHints.CACHE_REGION, "query.Cms");
 
         List<Menu> results = query.getResultList();
         if (!results.isEmpty()) {
