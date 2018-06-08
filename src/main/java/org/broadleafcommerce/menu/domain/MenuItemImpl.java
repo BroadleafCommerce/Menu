@@ -21,14 +21,11 @@ import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.cms.page.domain.PageImpl;
 import org.broadleafcommerce.common.copy.CreateResponse;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
-import org.broadleafcommerce.common.extensibility.jpa.clone.ClonePolicy;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMember;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
-import org.broadleafcommerce.common.media.domain.Media;
-import org.broadleafcommerce.common.media.domain.MediaImpl;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
@@ -128,10 +125,11 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             order = Presentation.FieldOrder.ACTION_URL)
     protected String actionUrl;
 
-    @ManyToOne(targetEntity = MediaImpl.class, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "MEDIA_ID")
-    @ClonePolicy
-    protected Media image;
+    @Column(name = "IMAGE_URL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_ImageUrl",
+            order = Presentation.FieldOrder.IMAGE_URL,
+            fieldType = SupportedFieldType.ASSET_LOOKUP)
+    protected String imageUrl;
 
     @Column(name = "ALT_TEXT")
     @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
@@ -202,13 +200,13 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     }
 
     @Override
-    public Media getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     @Override
-    public void setImage(Media image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -310,9 +308,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             cloned.setParentMenu(parentMenu.createOrRetrieveCopyInstance(context).getClone());
         }
         cloned.setActionUrl(actionUrl);
-        if (image != null) {
-            cloned.setImage(((MediaImpl) image).createOrRetrieveCopyInstance(context).getClone());
-        }
+        cloned.setImageUrl(imageUrl);
         cloned.setAltText(altText);
         if (linkedMenu != null) {
             cloned.setLinkedMenu(linkedMenu.createOrRetrieveCopyInstance(context).getClone());

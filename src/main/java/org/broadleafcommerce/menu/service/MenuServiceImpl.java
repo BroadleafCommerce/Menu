@@ -105,8 +105,8 @@ public class MenuServiceImpl implements MenuService {
             MenuItemDTO dto = new MenuItemDTO();
             dto.setUrl(menuItem.getDerivedUrl());
             dto.setLabel(menuItem.getDerivedLabel());
-            if (menuItem.getImage() != null) {
-                dto.setImageUrl(menuItem.getImage().getUrl());
+            if (menuItem.getImageUrl() != null) {
+                dto.setImageUrl(menuItem.getImageUrl());
                 dto.setAltText(menuItem.getAltText());
             }
             return dto;

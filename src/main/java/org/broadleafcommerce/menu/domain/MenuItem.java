@@ -78,16 +78,16 @@ public interface MenuItem extends Serializable, MultiTenantCloneable<MenuItem> {
     public void setActionUrl(String actionUrl);
 
     /**
-     * For items of type {@link MenuItemType#LINK}, gets any Media associated with this Menu Item
+     * For items of type {@link MenuItemType#LINK}, gets an Image associated with this Menu Item
      * @return
      */
-    public Media getImage();
+    public String getImageUrl();
 
     /**
      * For items of type {@link MenuItemType#LINK}, sets an Image for this Menu Item
      * @param imageUrl
      */
-    public void setImage(Media media);
+    public void setImageUrl(String imageUrl);
 
     /**
      * Returns the {@link Menu} to which this menuItem belongs
