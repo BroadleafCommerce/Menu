@@ -12,7 +12,7 @@ different types: "Link", "Category", "Page", "Submenu", "Product", or "Custom"
 
 | Menu Version           | Broadleaf Version |
 | :--------------------: | :---------------: |
-| 2.2.0-GA               | 5.2.0-GA          |
+| 3.0.0-GA               | 6.0.0-GA          |
 
 ## Module Installation
 
