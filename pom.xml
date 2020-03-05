@@ -14,7 +14,7 @@
     <version>2.1.4-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>5.1.19-GA</blc.version>
+        <blc.version>5.1.19-SNAPSHOT</blc.version>
         <project.uri>${project.baseUri}</project.uri>
     </properties>
     <scm>
