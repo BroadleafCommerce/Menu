@@ -87,7 +87,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
             translatable = true)
     protected String name;
 
-    @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = { CascadeType.ALL })
     @AdminPresentationCollection(friendlyName = "MenuItemImpl_MenuItems",
             sortProperty = "sequence",
             addType = AddMethodType.PERSIST)
