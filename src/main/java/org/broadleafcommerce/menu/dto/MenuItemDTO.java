@@ -36,6 +36,7 @@ public class MenuItemDTO implements Serializable {
     protected String url;
     protected String imageUrl;
     protected String altText;
+    protected String customHtml;
 
     /**
      * not always set, only if the menu item represents a category.
@@ -96,4 +97,11 @@ public class MenuItemDTO implements Serializable {
         return serialVersionUID;
     }
 
+    public String getCustomHtml() {
+        return customHtml;
+    }
+
+    public void setCustomHtml(String customHtml) {
+        this.customHtml = customHtml;
+    }
 }
