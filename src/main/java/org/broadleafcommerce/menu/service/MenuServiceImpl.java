@@ -101,15 +101,12 @@ public class MenuServiceImpl implements MenuService {
             } else {
                 return null;
             }
-        } else {
-            MenuItemDTO dto = new MenuItemDTO();
-            dto.setUrl(menuItem.getDerivedUrl());
-            dto.setLabel(menuItem.getDerivedLabel());
-            if (menuItem.getImageUrl() != null) {
-                dto.setImageUrl(menuItem.getImageUrl());
-                dto.setAltText(menuItem.getAltText());
-            }
+        } else if (MenuItemType.CUSTOM.equals(menuItem.getMenuItemType())) {
+            MenuItemDTO dto = createDto(menuItem);
+            dto.setCustomHtml(menuItem.getCustomHtml());
             return dto;
+        } else {
+            return createDto(menuItem);
         }
 
     }
@@ -136,6 +133,17 @@ public class MenuServiceImpl implements MenuService {
         
         dto.setSubmenu(submenu);
         
+        return dto;
+    }
+
+    protected MenuItemDTO createDto(MenuItem menuItem) {
+        MenuItemDTO dto = new MenuItemDTO();
+        dto.setUrl(menuItem.getDerivedUrl());
+        dto.setLabel(menuItem.getDerivedLabel());
+        if (menuItem.getImageUrl() != null) {
+            dto.setImageUrl(menuItem.getImageUrl());
+            dto.setAltText(menuItem.getAltText());
+        }
         return dto;
     }
     
