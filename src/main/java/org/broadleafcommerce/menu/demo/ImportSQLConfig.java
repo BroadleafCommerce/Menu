@@ -52,9 +52,4 @@ public class ImportSQLConfig {
         return new AutoImportSql(AutoImportPersistenceUnit.BL_PU,"config/bc/sql/demo/load_menu_data.sql", AutoImportStage.PRIMARY_BASIC_DATA);
     }
 
-    @Bean
-    @Conditional(DemoCondition.class)
-    public AutoImportSql blMenuSequenceData() {
-        return new AutoImportSql(AutoImportPersistenceUnit.ALL,"config/bc/sql/demo/load_menu_table_sequences.sql", AutoImportStage.ALL_TABLE_SEQUENCE);
-    }
 }
