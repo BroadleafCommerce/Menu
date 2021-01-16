@@ -34,6 +34,7 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Parameter;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
+    @Index(name = "IDX_MENU_NAME", columnNames = { "NAME" })
     @AdminPresentation(friendlyName = "MenuImpl_Name",
             order = Presentation.FieldOrder.NAME,
             gridOrder = Presentation.FieldOrder.NAME,
