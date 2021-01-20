@@ -57,7 +57,7 @@
         <repository>
             <id>public snapshots</id>
             <name>public snapshots</name>
-            <url>http://www.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
     <build>
