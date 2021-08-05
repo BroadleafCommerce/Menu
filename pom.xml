@@ -11,7 +11,7 @@
     <artifactId>broadleaf-menu</artifactId>
     <name>BroadleafCommerce Menu</name>
     <description>BroadleafCommerce Menu</description>
-    <version>3.3.0-GA</version>
+    <version>3.3.1-SNAPSHOT</version>
     <properties>
         <blc.version>6.2.0-GA</blc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
         <developerConnection>scm:git:git@github.com:BroadleafCommerce/Menu.git</developerConnection>
         <url>https://github.com/BroadleafCommerce/BroadleafCommerce</url>
-      <tag>broadleaf-menu-3.3.0-GA</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <url>http://www.broadleafcommerce.com</url>
