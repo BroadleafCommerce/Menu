@@ -39,15 +39,27 @@ import org.broadleafcommerce.openadmin.dto.PersistencePerspective;
 import org.broadleafcommerce.openadmin.dto.Property;
 import org.broadleafcommerce.openadmin.server.dao.DynamicEntityDao;
 import org.broadleafcommerce.openadmin.server.service.handler.CustomPersistenceHandlerAdapter;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.EmptyFilterValues;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.InspectHelper;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.PersistenceModule;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.RecordHelper;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.criteria.FieldPath;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.criteria.FieldPathBuilder;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.criteria.FilterMapping;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.criteria.Restriction;
+import org.broadleafcommerce.openadmin.server.service.persistence.module.criteria.predicate.PredicateProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.From;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -58,6 +70,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     private static final Log LOG = LogFactory.getLog(MenuItemCustomPersistenceHandler.class);
 
     public static final String DERIVED_LABEL_FIELD_NAME = "derivedLabel";
+    protected static final String ID_PROPERTY = "id";
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
@@ -75,6 +88,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Boolean canHandleFetch(PersistencePackage persistencePackage) {
+        if(isSelectingLinkedMenu(persistencePackage)) return true;
         return canHandleInspect(persistencePackage);
     }
 
@@ -85,6 +99,14 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Boolean canHandleUpdate(PersistencePackage persistencePackage) {
+        Entity entity = persistencePackage.getEntity();
+        if (entity instanceof MenuItem) {
+            final String currentCategoryId = entity.getPMap().get("id").getValue();
+            final String defaultCategoryId = entity.getPMap().get("linkedMenu").getValue();
+            if (currentCategoryId == null || !currentCategoryId.equals(defaultCategoryId)) {
+                return true;
+            }
+        }
         return canHandleInspect(persistencePackage);
     }
 
@@ -133,6 +155,17 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public DynamicResultSet fetch(PersistencePackage persistencePackage, CriteriaTransferObject cto, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
+        if (isSelectingLinkedMenu(persistencePackage)) {
+            FilterMapping defaultCategoryMapping = createFilterMappingForProperty(ID_PROPERTY, new PredicateProvider() {
+                @Override
+                public Predicate buildPredicate(CriteriaBuilder builder, FieldPathBuilder fieldPathBuilder, From root,
+                                                String ceilingEntity, String fullPropertyName, Path explicitPath,
+                                                List directValues) {
+                    return builder.and(builder.notEqual(explicitPath, persistencePackage.getSectionCrumbs()[0].getSectionId()));
+                }
+            });
+            cto.getAdditionalFilterMappings().add(defaultCategoryMapping);
+        }
         OperationType fetchType = persistencePackage.getPersistencePerspective().getOperationTypes().getFetchType();
         PersistenceModule persistenceModule = helper.getCompatibleModule(fetchType);
         DynamicResultSet drs = persistenceModule.fetch(persistencePackage, cto);
@@ -172,5 +205,21 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
             url.setValue(" ");
         }
         return helper.getCompatibleModule(OperationType.BASIC).update(persistencePackage);
+    }
+
+    protected boolean isSelectingLinkedMenu(PersistencePackage persistencePackage) {
+        List<String> customCriteria = Arrays.asList(persistencePackage.getCustomCriteria());
+        return customCriteria.contains("requestingField=linkedMenu");
+    }
+
+    protected FilterMapping createFilterMappingForProperty(String targetPropertyName, PredicateProvider predicateProvider) {
+        FieldPath fieldPath = new FieldPath().withTargetProperty(targetPropertyName);
+        EmptyFilterValues directFilterValues = new EmptyFilterValues();
+        Restriction newRestriction = new Restriction().withPredicateProvider(predicateProvider);
+
+        return new FilterMapping()
+            .withFieldPath(fieldPath)
+            .withDirectFilterValues(directFilterValues)
+            .withRestriction(newRestriction);
     }
 }
