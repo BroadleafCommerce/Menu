@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>3.0.4-GA</version>
+        <version>3.0.6-GA</version>
     </parent>
 
+    <name>BroadleafCommerce Menu</name>
+    <description>BroadleafCommerce Menu Module</description>
     <groupId>org.broadleafcommerce</groupId>
     <artifactId>broadleaf-menu</artifactId>
-    <name>BroadleafCommerce Menu</name>
-    <description>BroadleafCommerce Menu</description>
     <version>3.0.3-SNAPSHOT</version>
+    <url>https://www.broadleafcommerce.com</url>
+
     <properties>
         <blc.version>6.0.8-GA</blc.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,10 +24,8 @@
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
         <developerConnection>scm:git:git@github.com:BroadleafCommerce/Menu.git</developerConnection>
         <url>https://github.com/BroadleafCommerce/BroadleafCommerce</url>
-      <tag>HEAD</tag>
+        <tag>HEAD</tag>
     </scm>
-
-    <url>http://www.broadleafcommerce.com</url>
     <licenses>
         <license>
             <name>Broadleaf Fair Use 1.0</name>
@@ -41,23 +42,24 @@
     </licenses>
     <developers>
         <developer>
-            <id>architect</id>
-            <email>architect@broadleafcommerce.org</email>
+            <id>blcteam</id>
+            <name>Broadleaf Commerce Team</name>
+            <email>info@broadleafcommerce.com</email>
             <organization>Broadleaf Commerce</organization>
-            <organizationUrl>http://www.broadleafcommerce.org</organizationUrl>
+            <organizationUrl>https://www.broadleafcommerce.com</organizationUrl>
             <timezone>-6</timezone>
         </developer>
     </developers>
     <repositories>
         <repository>
-            <id>public releases</id>
+            <id>releases</id>
             <name>public releases</name>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases</url>
+            <url>https://nexus2.broadleafcommerce.org/nexus/content/groups/community-releases/</url>
         </repository>
         <repository>
-            <id>public snapshots</id>
+            <id>snapshots</id>
             <name>public snapshots</name>
-            <url>http://www.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
+            <url>https://nexus2.broadleafcommerce.org/nexus/content/groups/community-snapshots/</url>
         </repository>
     </repositories>
     <build>
@@ -75,11 +77,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
+            <url>https://nexus2.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
+            <url>https://nexus2.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
         </repository>
     </distributionManagement>
     <dependencies>
