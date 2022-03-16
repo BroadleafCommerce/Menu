@@ -246,8 +246,9 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     protected Entity validateRecursiveRelationship(Entity entity) throws ServiceException {
         try {
-            String linkedMenuId = entity.findProperty(LINKED_MENU_PROPERTY).getValue();
-            if (linkedMenuId != null) {
+            Property linkedMenuIdProperty = entity.findProperty(LINKED_MENU_PROPERTY);
+            if (linkedMenuIdProperty != null && linkedMenuIdProperty.getValue() != null) {
+                String linkedMenuId = linkedMenuIdProperty.getValue();
                 Set<Long> ids = this.allMenuIds(linkedMenuId);
                 Long menuId = Long.parseLong(linkedMenuId);
                 if (ids.contains(menuId)) {
