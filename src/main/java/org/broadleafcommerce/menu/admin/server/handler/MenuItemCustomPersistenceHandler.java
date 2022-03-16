@@ -73,6 +73,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     private static final Log LOG = LogFactory.getLog(MenuItemCustomPersistenceHandler.class);
 
     public static final String DERIVED_LABEL_FIELD_NAME = "derivedLabel";
+    protected static final String IMAGE_URL = "image.url";
     protected static final String ID_PROPERTY = "id";
     protected static final String LINKED_MENU_PROPERTY = "linkedMenu";
 
@@ -185,12 +186,8 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     @Override
-    public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper)
-            throws ServiceException {
-        Property url = persistencePackage.getEntity().findProperty("image.url");
-        if (url != null && StringUtils.isEmpty(url.getValue())) {
-            url.setValue(" ");
-        }
+    public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
+        this.cleanImageProperty(persistencePackage);
         try {
             Entity entity = this.validateMenuItem(persistencePackage.getEntity());
             if (!entity.isValidationFailure()) {
@@ -206,10 +203,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Entity update(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
-        Property url = persistencePackage.getEntity().findProperty("image.url");
-        if (url != null && StringUtils.isEmpty(url.getValue())) {
-            url.setValue(" ");
-        }
+        this.cleanImageProperty(persistencePackage);
         try {
             Entity entity = this.validateMenuItem(persistencePackage.getEntity());
             if (!entity.isValidationFailure()) {
@@ -220,6 +214,13 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         } catch (Exception e) {
             LOG.error("Unable to update entity (execute persistence activity) ", e);
             throw new ServiceException("Unable to update entity", e);
+        }
+    }
+
+    protected void cleanImageProperty(final PersistencePackage persistencePackage) {
+        final Property url = persistencePackage.getEntity().findProperty(IMAGE_URL);
+        if (url != null && StringUtils.isEmpty(url.getValue())) {
+            url.setValue(" ");
         }
     }
 
@@ -240,17 +241,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     protected Entity validateMenuItem(final Entity entity) throws ServiceException {
-        final Entity entityAfterValidateRecursiveRelationship = this.validateRecursiveRelationship(entity);
-        return this.validateCategory(entityAfterValidateRecursiveRelationship);
-    }
-
-    protected Entity validateCategory(Entity entity) {
-        final String currentCategoryId = entity.getPMap().get("id").getValue();
-        final String defaultCategoryId = entity.getPMap().get("linkedMenu").getValue();
-        if (currentCategoryId != null && currentCategoryId.equals(defaultCategoryId)) {
-            entity.addValidationError(LINKED_MENU_PROPERTY, "validationCategory");
-        }
-        return entity;
+        return this.validateRecursiveRelationship(entity);
     }
 
     protected Entity validateRecursiveRelationship(Entity entity) throws ServiceException {
