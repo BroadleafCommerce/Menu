@@ -2,7 +2,7 @@
  * #%L
  * BroadleafCommerce Menu
  * %%
- * Copyright (C) 2009 - 2016 Broadleaf Commerce
+ * Copyright (C) 2009 - 2022 Broadleaf Commerce
  * %%
  * Licensed under the Broadleaf Fair Use License Agreement, Version 1.0
  * (the "Fair Use License" located  at http://license.broadleafcommerce.org/fair_use_license-1.0.txt)
@@ -59,6 +59,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -221,7 +222,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     protected void cleanImageProperty(final PersistencePackage persistencePackage) {
         final Property url = persistencePackage.getEntity().findProperty(IMAGE_URL);
         if (url != null && StringUtils.isEmpty(url.getValue())) {
-            url.setValue(" ");
+            url.setValue("");
         }
     }
 
@@ -242,41 +243,49 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     protected void validateMenuItem(final Entity entity) throws ValidationException {
-        this.validateSelfLink(entity);
-        this.validateRecursiveRelationship(entity);
-    }
-
-    protected void validateSelfLink(final Entity entity) throws ValidationException {
         final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
         final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
         if (linkedMenuProperty != null && linkedMenuProperty.getValue() != null
-                && parentMenuProperty != null) {
-            final String linkedMenuId = linkedMenuProperty.getValue();
-            final String parentMenuId = parentMenuProperty.getValue();
-            if (linkedMenuId.equals(parentMenuId)) {
-                entity.addValidationError(LINKED_MENU_PROPERTY,"validateSelfLink");
-                throw new ValidationException(entity);
+                && parentMenuProperty != null && parentMenuProperty.getValue() != null) {
+            this.validateSelfLink(entity, linkedMenuProperty.getValue(), parentMenuProperty.getValue());
+            final Long linkedMenuId = Long.parseLong(linkedMenuProperty.getValue());
+            final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
+            final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
+            final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
+            this.validateDuplicateChild(entity, linkedMenu, parentMenu);
+            final Property typeProperty = entity.findProperty(TYPE_PROPERTY);
+            if (typeProperty != null && MenuItemType.SUBMENU.getType().equals(typeProperty.getValue())) {
+                this.validateRecursiveRelationship(entity, linkedMenu, parentMenu);
             }
         }
     }
 
-    protected void validateRecursiveRelationship(final Entity entity) throws ValidationException {
-        final Property typeProperty = entity.findProperty(TYPE_PROPERTY);
-        final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
-        final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
-        if (typeProperty != null && MenuItemType.SUBMENU.getType().equals(typeProperty.getValue())) {
-            if (linkedMenuProperty != null && linkedMenuProperty.getValue() != null
-                    && parentMenuProperty != null && parentMenuProperty.getValue() != null) {
-                final Long linkedMenuId = Long.parseLong(linkedMenuProperty.getValue());
-                final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
-                final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
-                final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
-                final StringBuilder menuLinks = new StringBuilder();
-                this.addMenuLink(menuLinks, parentMenu.getName());
-                this.addMenuLink(menuLinks, linkedMenu.getName());
-                this.validateLinkedMenu(entity, linkedMenu, parentMenuId, menuLinks);
-            }
+    protected void validateSelfLink(final Entity entity, final String linkedMenuId, final String parentMenuId)
+            throws ValidationException {
+        if (linkedMenuId.equals(parentMenuId)) {
+            entity.addValidationError(LINKED_MENU_PROPERTY, "validateMenuSelfLink");
+            throw new ValidationException(entity);
         }
+    }
+
+    protected void validateDuplicateChild(final Entity entity, final Menu linkedMenu, final Menu parentMenu)
+            throws ValidationException {
+        final List<Long> childMenuIds = parentMenu.getMenuItems().stream()
+                .filter(menuItem -> MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()))
+                .map(menuItem -> menuItem.getLinkedMenu().getId())
+                .collect(Collectors.toList());
+        if (childMenuIds.contains(linkedMenu.getId())) {
+            entity.addValidationError(LINKED_MENU_PROPERTY, "validateMenuDuplicateChild");
+            throw new ValidationException(entity);
+        }
+    }
+
+    protected void validateRecursiveRelationship(final Entity entity, final Menu linkedMenu, final Menu parentMenu)
+            throws ValidationException {
+        final StringBuilder menuLinks = new StringBuilder();
+        this.addMenuLink(menuLinks, parentMenu.getName());
+        this.addMenuLink(menuLinks, linkedMenu.getName());
+        this.validateLinkedMenu(entity, linkedMenu, parentMenu.getId(), menuLinks);
     }
 
     private void validateLinkedMenu(final Entity entity, final Menu linkedMenu, final Long id,
@@ -291,7 +300,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
                         if (id.equals(itemLinkedMenu.getId()) || id.equals(originalId)) {
                             menuLinks.delete(menuLinks.lastIndexOf(MENU_SEPARATOR), menuLinks.length());
                             final String errorMessage = BLCMessageUtils.getMessage(
-                                    "validationRecursiveRelationship", menuLinks
+                                    "validateMenuRecursiveRelationship", menuLinks
                             );
                             entity.addValidationError(LINKED_MENU_PROPERTY, errorMessage);
                             throw new ValidationException(entity);
