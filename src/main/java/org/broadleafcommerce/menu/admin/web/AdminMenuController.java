@@ -2,7 +2,7 @@
  * #%L
  * BroadleafCommerce Menu
  * %%
- * Copyright (C) 2009 - 2016 Broadleaf Commerce
+ * Copyright (C) 2009 - 2022 Broadleaf Commerce
  * %%
  * Licensed under the Broadleaf Fair Use License Agreement, Version 1.0
  * (the "Fair Use License" located  at http://license.broadleafcommerce.org/fair_use_license-1.0.txt)
@@ -60,20 +60,26 @@ public class AdminMenuController extends AdminBasicEntityController {
                                         @RequestParam MultiValueMap<String, String> requestParams) throws Exception {
         String view = super.showAddCollectionItem(request, response, model, pathVars, id, collectionField, requestParams);
         model.addAttribute("additionalControllerClasses", "menu-item-form");
-
+        Object entityForm = model.asMap().get("entityForm");
+        if (entityForm != null) {
+            this.cleanImageProperty((EntityForm) entityForm);
+        }
         return view;
     }
 
     @Override
     @RequestMapping(value = "/{id}/{collectionField:.*}/{collectionItemId}", method = RequestMethod.GET)
     public String showUpdateCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
-                                           @PathVariable  Map<String, String> pathVars,
-                                           @PathVariable(value="id") String id,
-                                           @PathVariable(value="collectionField") String collectionField,
-                                           @PathVariable(value="collectionItemId") String collectionItemId) throws Exception {
+                                           @PathVariable Map<String, String> pathVars,
+                                           @PathVariable(value = "id") String id,
+                                           @PathVariable(value = "collectionField") String collectionField,
+                                           @PathVariable(value = "collectionItemId") String collectionItemId) throws Exception {
         String view = super.showUpdateCollectionItem(request, response, model, pathVars, id, collectionField, collectionItemId);
         model.addAttribute("additionalControllerClasses", "menu-item-form");
-
+        Object entityForm = model.asMap().get("entityForm");
+        if (entityForm != null) {
+            this.cleanImageProperty((EntityForm) entityForm);
+        }
         return view;
     }
 
@@ -82,18 +88,28 @@ public class AdminMenuController extends AdminBasicEntityController {
             value = {"/{id}/{collectionField:.*}/add"},
             method = {RequestMethod.POST}
     )
-    public String addCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable Map<String, String> pathVars, @PathVariable("id") String id, @PathVariable("collectionField") String collectionField, @ModelAttribute("entityForm") EntityForm entityForm, BindingResult result) throws Exception {
+    public String addCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model,
+                                    @PathVariable Map<String, String> pathVars,
+                                    @PathVariable("id") String id,
+                                    @PathVariable("collectionField") String collectionField,
+                                    @ModelAttribute("entityForm") EntityForm entityForm,
+                                    BindingResult result) throws Exception {
         String view = super.addCollectionItem(request, response, model, pathVars, id, collectionField, entityForm, result);
         if (result.hasErrors()) {
-            Map<String, Field> fields = entityForm.getFields();
-            if (fields != null) {
-                Field imageUrl = fields.get("imageUrl");
-                if (imageUrl != null && imageUrl.getValue() != null && imageUrl.getValue().trim().length() == 0) {
-                    imageUrl.setValue("");
-                }
-            }
+            cleanImageProperty(entityForm);
         }
         model.addAttribute("additionalControllerClasses", "menu-item-form");
         return view;
     }
+
+    protected void cleanImageProperty(final EntityForm entityForm) {
+        final Map<String, Field> fields = entityForm.getFields();
+        if (fields != null) {
+            final Field imageUrl = fields.get("imageUrl");
+            if (imageUrl != null && imageUrl.getValue() != null && imageUrl.getValue().trim().length() == 0) {
+                imageUrl.setValue("");
+            }
+        }
+    }
+
 }

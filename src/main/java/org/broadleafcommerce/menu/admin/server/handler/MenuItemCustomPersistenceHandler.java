@@ -222,7 +222,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     protected void cleanImageProperty(final PersistencePackage persistencePackage) {
         final Property url = persistencePackage.getEntity().findProperty(IMAGE_URL);
         if (url != null && StringUtils.isEmpty(url.getValue())) {
-            url.setValue("");
+            url.setValue(" ");
         }
     }
 
