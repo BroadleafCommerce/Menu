@@ -24,9 +24,13 @@ import org.broadleafcommerce.common.exception.ServiceException;
 import org.broadleafcommerce.common.presentation.client.OperationType;
 import org.broadleafcommerce.common.presentation.client.SupportedFieldType;
 import org.broadleafcommerce.common.presentation.client.VisibilityEnum;
+import org.broadleafcommerce.common.sandbox.SandBoxHelper;
+import org.broadleafcommerce.common.util.BLCMessageUtils;
+import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.domain.MenuItemImpl;
 import org.broadleafcommerce.menu.service.MenuService;
+import org.broadleafcommerce.menu.type.MenuItemType;
 import org.broadleafcommerce.openadmin.dto.BasicFieldMetadata;
 import org.broadleafcommerce.openadmin.dto.ClassMetadata;
 import org.broadleafcommerce.openadmin.dto.CriteriaTransferObject;
@@ -38,6 +42,7 @@ import org.broadleafcommerce.openadmin.dto.PersistencePackage;
 import org.broadleafcommerce.openadmin.dto.PersistencePerspective;
 import org.broadleafcommerce.openadmin.dto.Property;
 import org.broadleafcommerce.openadmin.server.dao.DynamicEntityDao;
+import org.broadleafcommerce.openadmin.server.service.ValidationException;
 import org.broadleafcommerce.openadmin.server.service.handler.CustomPersistenceHandlerAdapter;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.EmptyFilterValues;
 import org.broadleafcommerce.openadmin.server.service.persistence.module.InspectHelper;
@@ -70,16 +75,23 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     private static final Log LOG = LogFactory.getLog(MenuItemCustomPersistenceHandler.class);
 
     public static final String DERIVED_LABEL_FIELD_NAME = "derivedLabel";
+    public static final String MENU_SEPARATOR = " -> ";
+    protected static final String IMAGE_URL = "imageUrl";
     protected static final String ID_PROPERTY = "id";
+    protected static final String TYPE_PROPERTY = "type";
+    protected static final String LINKED_MENU_PROPERTY = "linkedMenu";
+    protected static final String PARENT_MENU_PROPERTY = "parentMenu";
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
+    @Resource(name = "blSandBoxHelper")
+    protected SandBoxHelper sandBoxHelper;
 
     @Override
     public Boolean canHandleInspect(PersistencePackage persistencePackage) {
         String ceilingEntityFullyQualifiedClassname = persistencePackage.getCeilingEntityFullyQualifiedClassname();
         try {
-            Class testClass = Class.forName(ceilingEntityFullyQualifiedClassname);
+            Class<?> testClass = Class.forName(ceilingEntityFullyQualifiedClassname);
             return MenuItem.class.isAssignableFrom(testClass);
         } catch (ClassNotFoundException e) {
             return false;
@@ -88,7 +100,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Boolean canHandleFetch(PersistencePackage persistencePackage) {
-        if(isSelectingLinkedMenu(persistencePackage)) return true;
+        if (isSelectingLinkedMenu(persistencePackage)) return true;
         return canHandleInspect(persistencePackage);
     }
 
@@ -99,14 +111,6 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
 
     @Override
     public Boolean canHandleUpdate(PersistencePackage persistencePackage) {
-        Entity entity = persistencePackage.getEntity();
-        if (entity instanceof MenuItem) {
-            final String currentCategoryId = entity.getPMap().get("id").getValue();
-            final String defaultCategoryId = entity.getPMap().get("linkedMenu").getValue();
-            if (currentCategoryId == null || !currentCategoryId.equals(defaultCategoryId)) {
-                return true;
-            }
-        }
         return canHandleInspect(persistencePackage);
     }
 
@@ -189,22 +193,36 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     @Override
-    public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper)
-            throws ServiceException {
-        Property url = persistencePackage.getEntity().findProperty("image.url");
-        if (url != null && StringUtils.isEmpty(url.getValue())) {
-            url.setValue(" ");
+    public Entity add(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
+        this.cleanImageProperty(persistencePackage);
+        this.validateMenuItem(persistencePackage.getEntity());
+        try {
+            OperationType updateType = persistencePackage.getPersistencePerspective().getOperationTypes().getUpdateType();
+            return helper.getCompatibleModule(updateType).add(persistencePackage);
+        } catch (Exception e) {
+            LOG.error("Unable to add entity (execute persistence activity) ", e);
+            throw new ServiceException("Unable to add entity", e);
         }
-        return helper.getCompatibleModule(OperationType.BASIC).add(persistencePackage);
     }
 
     @Override
     public Entity update(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
-        Property url = persistencePackage.getEntity().findProperty("image.url");
+        this.cleanImageProperty(persistencePackage);
+        this.validateMenuItem(persistencePackage.getEntity());
+        try {
+            OperationType updateType = persistencePackage.getPersistencePerspective().getOperationTypes().getUpdateType();
+            return helper.getCompatibleModule(updateType).update(persistencePackage);
+        } catch (Exception e) {
+            LOG.error("Unable to update entity (execute persistence activity) ", e);
+            throw new ServiceException("Unable to update entity", e);
+        }
+    }
+
+    protected void cleanImageProperty(final PersistencePackage persistencePackage) {
+        final Property url = persistencePackage.getEntity().findProperty(IMAGE_URL);
         if (url != null && StringUtils.isEmpty(url.getValue())) {
             url.setValue(" ");
         }
-        return helper.getCompatibleModule(OperationType.BASIC).update(persistencePackage);
     }
 
     protected boolean isSelectingLinkedMenu(PersistencePackage persistencePackage) {
@@ -218,8 +236,76 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         Restriction newRestriction = new Restriction().withPredicateProvider(predicateProvider);
 
         return new FilterMapping()
-            .withFieldPath(fieldPath)
-            .withDirectFilterValues(directFilterValues)
-            .withRestriction(newRestriction);
+                .withFieldPath(fieldPath)
+                .withDirectFilterValues(directFilterValues)
+                .withRestriction(newRestriction);
     }
+
+    protected void validateMenuItem(final Entity entity) throws ValidationException {
+        this.validateSelfLink(entity);
+        this.validateRecursiveRelationship(entity);
+    }
+
+    protected void validateSelfLink(final Entity entity) throws ValidationException {
+        final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
+        final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
+        if (linkedMenuProperty != null && linkedMenuProperty.getValue() != null
+                && parentMenuProperty != null) {
+            final String linkedMenuId = linkedMenuProperty.getValue();
+            final String parentMenuId = parentMenuProperty.getValue();
+            if (linkedMenuId.equals(parentMenuId)) {
+                entity.addValidationError(LINKED_MENU_PROPERTY,"validateSelfLink");
+                throw new ValidationException(entity);
+            }
+        }
+    }
+
+    protected void validateRecursiveRelationship(final Entity entity) throws ValidationException {
+        final Property typeProperty = entity.findProperty(TYPE_PROPERTY);
+        final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
+        final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
+        if (typeProperty != null && MenuItemType.SUBMENU.getType().equals(typeProperty.getValue())) {
+            if (linkedMenuProperty != null && linkedMenuProperty.getValue() != null
+                    && parentMenuProperty != null && parentMenuProperty.getValue() != null) {
+                final Long linkedMenuId = Long.parseLong(linkedMenuProperty.getValue());
+                final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
+                final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
+                final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
+                final StringBuilder menuLinks = new StringBuilder();
+                this.addMenuLink(menuLinks, parentMenu.getName());
+                this.addMenuLink(menuLinks, linkedMenu.getName());
+                this.validateLinkedMenu(entity, linkedMenu, parentMenuId, menuLinks);
+            }
+        }
+    }
+
+    private void validateLinkedMenu(final Entity entity, final Menu linkedMenu, final Long id,
+                                    final StringBuilder menuLinks) throws ValidationException {
+        if (linkedMenu != null) {
+            for (MenuItem menuItem : linkedMenu.getMenuItems()) {
+                if ((MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()))) {
+                    final Menu itemLinkedMenu = menuItem.getLinkedMenu();
+                    if (itemLinkedMenu != null) {
+                        this.addMenuLink(menuLinks, itemLinkedMenu.getName());
+                        final Long originalId = this.sandBoxHelper.getOriginalId(itemLinkedMenu);
+                        if (id.equals(itemLinkedMenu.getId()) || id.equals(originalId)) {
+                            menuLinks.delete(menuLinks.lastIndexOf(MENU_SEPARATOR), menuLinks.length());
+                            final String errorMessage = BLCMessageUtils.getMessage(
+                                    "validationRecursiveRelationship", menuLinks
+                            );
+                            entity.addValidationError(LINKED_MENU_PROPERTY, errorMessage);
+                            throw new ValidationException(entity);
+                        }
+                        this.validateLinkedMenu(entity, itemLinkedMenu, id, menuLinks);
+                    }
+                }
+            }
+        }
+    }
+
+    protected void addMenuLink(final StringBuilder menuLinks, final String menuName) {
+        menuLinks.append(menuName);
+        menuLinks.append(MENU_SEPARATOR);
+    }
+
 }

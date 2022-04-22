@@ -18,13 +18,19 @@
 package org.broadleafcommerce.menu.admin.web;
 
 import org.broadleafcommerce.openadmin.web.controller.entity.AdminBasicEntityController;
+import org.broadleafcommerce.openadmin.web.form.entity.EntityForm;
+import org.broadleafcommerce.openadmin.web.form.entity.Field;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -71,5 +77,23 @@ public class AdminMenuController extends AdminBasicEntityController {
         return view;
     }
 
-
+    @Override
+    @RequestMapping(
+            value = {"/{id}/{collectionField:.*}/add"},
+            method = {RequestMethod.POST}
+    )
+    public String addCollectionItem(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable Map<String, String> pathVars, @PathVariable("id") String id, @PathVariable("collectionField") String collectionField, @ModelAttribute("entityForm") EntityForm entityForm, BindingResult result) throws Exception {
+        String view = super.addCollectionItem(request, response, model, pathVars, id, collectionField, entityForm, result);
+        if (result.hasErrors()) {
+            Map<String, Field> fields = entityForm.getFields();
+            if (fields != null) {
+                Field imageUrl = fields.get("imageUrl");
+                if (imageUrl != null && imageUrl.getValue() != null && imageUrl.getValue().trim().length() == 0) {
+                    imageUrl.setValue("");
+                }
+            }
+        }
+        model.addAttribute("additionalControllerClasses", "menu-item-form");
+        return view;
+    }
 }
