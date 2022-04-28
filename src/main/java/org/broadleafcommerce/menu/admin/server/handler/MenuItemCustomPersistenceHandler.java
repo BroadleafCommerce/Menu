@@ -243,26 +243,34 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     protected void validateMenuItem(final Entity entity) throws ValidationException {
-        final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
-        final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
-        if (linkedMenuProperty != null && linkedMenuProperty.getValue() != null
-                && parentMenuProperty != null && parentMenuProperty.getValue() != null) {
-            this.validateSelfLink(entity, linkedMenuProperty.getValue(), parentMenuProperty.getValue());
-            final Long linkedMenuId = Long.parseLong(linkedMenuProperty.getValue());
-            final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
-            final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
-            final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
-            this.validateDuplicateChild(entity, linkedMenu, parentMenu);
-            final Property typeProperty = entity.findProperty(TYPE_PROPERTY);
-            if (typeProperty != null && MenuItemType.SUBMENU.getType().equals(typeProperty.getValue())) {
+        final Property typeProperty = entity.findProperty(TYPE_PROPERTY);
+        if (typeProperty != null && MenuItemType.SUBMENU.getType().equals(typeProperty.getValue())) {
+            final Property parentMenuProperty = entity.findProperty(PARENT_MENU_PROPERTY);
+            final Property linkedMenuProperty = entity.findProperty(LINKED_MENU_PROPERTY);
+            if (parentMenuProperty != null && parentMenuProperty.getValue() != null && linkedMenuProperty != null) {
+                this.validateEmptyLinkedMenu(entity, linkedMenuProperty);
+                this.validateSelfLink(entity, linkedMenuProperty.getValue(), parentMenuProperty.getValue());
+                final Long linkedMenuId = Long.parseLong(linkedMenuProperty.getValue());
+                final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
+                final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
+                final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
+                this.validateDuplicateChild(entity, linkedMenu, parentMenu);
                 this.validateRecursiveRelationship(entity, linkedMenu, parentMenu);
             }
         }
     }
 
+    protected void validateEmptyLinkedMenu(final Entity entity, final Property linkedMenuProperty)
+            throws ValidationException {
+        if (linkedMenuProperty.getValue() == null) {
+            entity.addValidationError(LINKED_MENU_PROPERTY, "validateMenuEmptySubMenu");
+            throw new ValidationException(entity);
+        }
+    }
+
     protected void validateSelfLink(final Entity entity, final String linkedMenuId, final String parentMenuId)
             throws ValidationException {
-        if (linkedMenuId.equals(parentMenuId)) {
+        if (parentMenuId.equals(linkedMenuId)) {
             entity.addValidationError(LINKED_MENU_PROPERTY, "validateMenuSelfLink");
             throw new ValidationException(entity);
         }
