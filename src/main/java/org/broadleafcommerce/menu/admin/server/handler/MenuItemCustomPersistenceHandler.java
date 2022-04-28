@@ -59,6 +59,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -254,7 +255,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
                 final Long parentMenuId = Long.parseLong(parentMenuProperty.getValue());
                 final Menu linkedMenu = this.menuService.findMenuById(linkedMenuId);
                 final Menu parentMenu = this.menuService.findMenuById(parentMenuId);
-                this.validateDuplicateChild(entity, linkedMenu, parentMenu);
+                this.validateDuplicateChild(entity, parentMenu, linkedMenuId);
                 this.validateRecursiveRelationship(entity, linkedMenu, parentMenu);
             }
         }
@@ -276,16 +277,30 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         }
     }
 
-    protected void validateDuplicateChild(final Entity entity, final Menu linkedMenu, final Menu parentMenu)
+    protected void validateDuplicateChild(final Entity entity, final Menu parentMenu, final Long linkedMenuId)
             throws ValidationException {
+        final Long previousLinkedMenuId = this.previousLinkedMenuId(entity);
         final List<Long> childMenuIds = parentMenu.getMenuItems().stream()
                 .filter(menuItem -> MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()))
                 .map(menuItem -> menuItem.getLinkedMenu().getId())
+                .filter(id -> !Objects.equals(id, previousLinkedMenuId))
                 .collect(Collectors.toList());
-        if (childMenuIds.contains(linkedMenu.getId())) {
+        if (childMenuIds.contains(linkedMenuId)) {
             entity.addValidationError(LINKED_MENU_PROPERTY, "validateMenuDuplicateChild");
             throw new ValidationException(entity);
         }
+    }
+
+    protected Long previousLinkedMenuId(final Entity entity) {
+        final Property idProperty = entity.findProperty(ID_PROPERTY);
+        Long prevLinkedMenuId = null;
+        if (idProperty != null && idProperty.getValue() != null) {
+            final MenuItem menuItem = this.menuService.findMenuItemById(
+                    Long.parseLong(idProperty.getValue())
+            );
+            prevLinkedMenuId = menuItem.getLinkedMenu().getId();
+        }
+        return prevLinkedMenuId;
     }
 
     protected void validateRecursiveRelationship(final Entity entity, final Menu linkedMenu, final Menu parentMenu)
