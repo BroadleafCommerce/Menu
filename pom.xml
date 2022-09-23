@@ -16,9 +16,9 @@
     <url>https://www.broadleafcommerce.com</url>
 
     <properties>
-        <blc.version>6.3.0-SNAPSHOT</blc.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.uri>${project.baseUri}</project.uri>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <blc.version>6.3.0-SNAPSHOT</blc.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
