@@ -5,20 +5,20 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>3.3.2-GA</version>
+        <version>3.4.0-SNAPSHOT</version>
     </parent>
 
     <name>BroadleafCommerce Menu</name>
     <description>BroadleafCommerce Menu Module</description>
     <groupId>org.broadleafcommerce</groupId>
     <artifactId>broadleaf-menu</artifactId>
-    <version>3.3.3-SNAPSHOT</version>
+    <version>3.4.0-SNAPSHOT</version>
     <url>https://www.broadleafcommerce.com</url>
 
     <properties>
-        <blc.version>6.2.2-GA</blc.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.uri>${project.baseUri}</project.uri>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <blc.version>6.3.0-SNAPSHOT</blc.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
