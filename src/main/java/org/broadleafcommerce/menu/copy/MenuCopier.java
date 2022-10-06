@@ -1,9 +1,8 @@
-package org.broadleafcommerce.menu.copy;
-/*
+/*-
  * #%L
- * BroadleafCommerce Pricelist
+ * BroadleafCommerce Menu
  * %%
- * Copyright (C) 2009 - 2016 Broadleaf Commerce
+ * Copyright (C) 2009 - 2022 Broadleaf Commerce
  * %%
  * Licensed under the Broadleaf Fair Use License Agreement, Version 1.0
  * (the "Fair Use License" located  at http://license.broadleafcommerce.org/fair_use_license-1.0.txt)
@@ -16,7 +15,7 @@ package org.broadleafcommerce.menu.copy;
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
  */
-
+package org.broadleafcommerce.menu.copy;
 
 import org.broadleafcommerce.common.copy.MultiTenantCopier;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
