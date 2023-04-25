@@ -30,7 +30,7 @@ public abstract class AbstractMenuProcessorExtensionHandler extends AbstractExte
         implements MenuProcessorExtensionHandler {
 
     @Override
-    public ExtensionResultStatusType addAdditionalFieldsToModel(String tagName, Map<String, String> tagAttributes, Map<String, Object> newModelVars, BroadleafTemplateContext context) {
+    public ExtensionResultStatusType addAdditionalFieldsToModel(Map<String, Object> newModelVars, String menuId, String menuName) {
         return ExtensionResultStatusType.NOT_HANDLED;
     }
 

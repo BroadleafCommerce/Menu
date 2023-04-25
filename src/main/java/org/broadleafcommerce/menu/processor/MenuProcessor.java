@@ -22,8 +22,6 @@ import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.service.LinkedDataService;
 import org.broadleafcommerce.menu.service.MenuService;
 import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
-import org.broadleafcommerce.presentation.dialect.AbstractBroadleafVariableModifierProcessor;
-import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -41,7 +39,7 @@ import java.util.Map;
  */
 @Component("blMenuProcessor")
 @ConditionalOnTemplating
-public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
+public class MenuProcessor implements MenuExpression {
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
@@ -63,10 +61,7 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
     }
 
     @Override
-    public Map<String, Object> populateModelVariables(String tagName, Map<String, String> tagAttributes, BroadleafTemplateContext context) {
-        String resultVar = tagAttributes.get("resultVar");
-        String menuName = tagAttributes.get("menuName");
-        String menuId = tagAttributes.get("menuId");
+    public Map<String, Object> getMenu(String menuId, String menuName) {
 
         final Menu menu;
 
@@ -78,8 +73,8 @@ public class MenuProcessor extends AbstractBroadleafVariableModifierProcessor {
 
         Map<String, Object> newModelVars = new HashMap<>();
         if (menu != null) {
-            newModelVars.put(resultVar, menuService.constructMenuItemDTOsForMenu(menu));
-            extensionManager.getProxy().addAdditionalFieldsToModel(tagName, tagAttributes, newModelVars, context);
+            newModelVars.put("menuName", menuService.constructMenuItemDTOsForMenu(menu));
+            extensionManager.getProxy().addAdditionalFieldsToModel(newModelVars, menuId, menuName);
 
             newModelVars.put("menuLinkedData", linkedDataService.getLinkedData(menu));
         }
