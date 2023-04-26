@@ -22,7 +22,7 @@ import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a menu, typically to drive the display of navigation on a website.

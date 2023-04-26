@@ -24,7 +24,7 @@ import org.broadleafcommerce.menu.service.MenuService;
 import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Component("blMenuLinkedDataProcessor")
 @ConditionalOnTemplating
