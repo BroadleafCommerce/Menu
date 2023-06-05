@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>3.3.4-GA</version>
+        <version>3.3.6-SNAPSHOT</version>
     </parent>
 
     <name>BroadleafCommerce Menu</name>
@@ -18,7 +18,7 @@
     <properties>
         <project.uri>${project.baseUri}</project.uri>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>6.2.5-GA</blc.version>
+        <blc.version>6.2.7-SNAPSHOT</blc.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
