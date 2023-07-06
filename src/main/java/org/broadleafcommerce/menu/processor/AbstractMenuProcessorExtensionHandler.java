@@ -19,8 +19,10 @@ package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.common.extension.AbstractExtensionHandler;
 import org.broadleafcommerce.common.extension.ExtensionResultStatusType;
+import org.broadleafcommerce.menu.dto.MenuItemDTO;
 import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +32,7 @@ public abstract class AbstractMenuProcessorExtensionHandler extends AbstractExte
         implements MenuProcessorExtensionHandler {
 
     @Override
-    public ExtensionResultStatusType addAdditionalFieldsToModel(String tagName, Map<String, String> tagAttributes, Map<String, Object> newModelVars, BroadleafTemplateContext context) {
+    public ExtensionResultStatusType addAdditionalFieldsToModel(List<MenuItemDTO> menuItemDTOList, String menuName) {
         return ExtensionResultStatusType.NOT_HANDLED;
     }
 

@@ -10,52 +10,38 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- *
+ * 
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
  */
-
 package org.broadleafcommerce.menu.processor;
 
 import org.broadleafcommerce.common.web.expression.BroadleafVariableExpression;
 import org.broadleafcommerce.menu.domain.Menu;
-import org.broadleafcommerce.menu.dto.MenuItemDTO;
+import org.broadleafcommerce.menu.service.LinkedDataService;
 import org.broadleafcommerce.menu.service.MenuService;
 import org.broadleafcommerce.presentation.condition.ConditionalOnTemplating;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.annotation.Resource;
 
-/**
- * A Thymeleaf processor that will add a list of MenuItemDTOs to the model.
- * <p>
- * It accepts a menuName or menuId. The precedence is that a menuId
- * will honored first, followed by a menuName.
- * An extension manager may override the resulting menu if configured to do so.
- *
- * @author bpolster
- */
-@Component("blMenuProcessor")
+@Component("blMenuLinkedDataProcessor")
 @ConditionalOnTemplating
-public class MenuProcessor implements BroadleafVariableExpression {
+public class MenuLinkedDataProcessor implements BroadleafVariableExpression {
 
     @Resource(name = "blMenuService")
     protected MenuService menuService;
 
-    @Resource(name = "blMenuProcessorExtensionManager")
-    protected MenuProcessorExtensionManager extensionManager;
+    @Resource(name = "blMenuLinkedDataService")
+    protected LinkedDataService linkedDataService;
 
     @Override
     public String getName() {
-        return "menu";
+        return "menuLinkedData";
     }
 
-    public List<MenuItemDTO> getMenu(String menuId, String menuName) {
-
+    public String getMenuLinkedData(String menuName, String menuId) {
         final Menu menu;
 
         if (menuId != null) {
@@ -64,12 +50,6 @@ public class MenuProcessor implements BroadleafVariableExpression {
             menu = menuService.findMenuByName(menuName);
         }
 
-        if (menu != null) {
-            List<MenuItemDTO> menuItemList = menuService.constructMenuItemDTOsForMenu(menu);
-            extensionManager.getProxy().addAdditionalFieldsToModel(menuItemList, menuName);
-            return menuItemList;
-        }
-
-        return Collections.emptyList();
+        return menu != null ? this.linkedDataService.getLinkedData(menu) : "";
     }
 }
