@@ -53,7 +53,9 @@ import javax.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "BLC_CMS_MENU")
+@Table(name = "BLC_CMS_MENU", indexes = {
+        @javax.persistence.Index(name = "IDX_MENU_NAME", columnList = "NAME")
+})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
 @AdminPresentationClass(friendlyName = "MenuImpl")
 @DirectCopyTransform({
@@ -81,7 +83,6 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @Index(name = "IDX_MENU_NAME", columnNames = { "NAME" })
     @AdminPresentation(friendlyName = "MenuImpl_Name",
             order = Presentation.FieldOrder.NAME,
             gridOrder = Presentation.FieldOrder.NAME,
