@@ -4,3 +4,4 @@ target/
 .settings/
 *.iml
 .sts4-cache
+.idea
