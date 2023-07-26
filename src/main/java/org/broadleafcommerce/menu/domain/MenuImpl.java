@@ -17,6 +17,7 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import jakarta.persistence.Index;
 import org.broadleafcommerce.common.admin.domain.AdminMainEntity;
 import org.broadleafcommerce.common.copy.CreateResponse;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
@@ -34,7 +35,6 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Parameter;
 
 import java.util.ArrayList;
@@ -53,7 +53,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "BLC_CMS_MENU")
+@Table(name = "BLC_CMS_MENU", indexes = {
+        @Index(name = "IDX_MENU_NAME", columnList = "NAME")})
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
 @AdminPresentationClass(friendlyName = "MenuImpl")
 @DirectCopyTransform({
@@ -81,7 +82,6 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     protected Long id;
 
     @Column(name = "NAME", nullable = false)
-    @Index(name = "IDX_MENU_NAME", columnNames = { "NAME" })
     @AdminPresentation(friendlyName = "MenuImpl_Name",
             order = Presentation.FieldOrder.NAME,
             gridOrder = Presentation.FieldOrder.NAME,
