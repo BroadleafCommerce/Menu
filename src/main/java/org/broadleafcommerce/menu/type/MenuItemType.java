@@ -17,6 +17,8 @@
  */
 package org.broadleafcommerce.menu.type;
 
+import org.broadleafcommerce.common.BroadleafEnumerationType;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +30,7 @@ import java.util.Map;
  * @author bpolster
  *
  */
-public class MenuItemType implements Serializable {
+public class MenuItemType implements BroadleafEnumerationType, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -58,10 +60,12 @@ public class MenuItemType implements Serializable {
         setType(type);
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public String getFriendlyType() {
         return friendlyType;
     }
