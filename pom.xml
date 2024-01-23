@@ -12,7 +12,7 @@
     <description>BroadleafCommerce Menu Module</description>
     <groupId>org.broadleafcommerce</groupId>
     <artifactId>broadleaf-menu</artifactId>
-    <version>3.3.6-SNAPSHOT</version>
+    <version>3.3.6-GA</version>
     <url>https://www.broadleafcommerce.com</url>
 
     <properties>
@@ -24,7 +24,7 @@
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
         <developerConnection>scm:git:git@github.com:BroadleafCommerce/Menu.git</developerConnection>
         <url>https://github.com/BroadleafCommerce/BroadleafCommerce</url>
-        <tag>HEAD</tag>
+        <tag>broadleaf-menu-3.3.6-GA</tag>
     </scm>
     <licenses>
         <license>
