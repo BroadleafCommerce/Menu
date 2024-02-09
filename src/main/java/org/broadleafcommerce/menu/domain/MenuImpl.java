@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -26,6 +26,7 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTy
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.domain.TranslatedEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
+import org.broadleafcommerce.common.persistence.IdOverrideTableGenerator;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationCollection;
@@ -73,7 +74,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     @GeneratedValue(generator = "MenuId")
     @GenericGenerator(
             name = "MenuId",
-            strategy = "org.broadleafcommerce.common.persistence.IdOverrideTableGenerator",
+            type = IdOverrideTableGenerator.class,
             parameters = {
                     @Parameter(name = "segment_value", value = "MenuImpl"),
                     @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuImpl")
@@ -89,7 +90,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
             translatable = true)
     protected String name;
 
-    @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "parentMenu", targetEntity = MenuItemImpl.class, cascade = {CascadeType.ALL})
     @AdminPresentationCollection(friendlyName = "MenuItemImpl_MenuItems",
             sortProperty = "sequence",
             addType = AddMethodType.PERSIST)

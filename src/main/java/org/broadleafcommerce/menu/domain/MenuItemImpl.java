@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -26,6 +26,7 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMe
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
+import org.broadleafcommerce.common.persistence.IdOverrideTableGenerator;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
@@ -86,7 +87,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     @GeneratedValue(generator = "MenuItemId")
     @GenericGenerator(
             name = "MenuItemId",
-            strategy = "org.broadleafcommerce.common.persistence.IdOverrideTableGenerator",
+            type = IdOverrideTableGenerator.class,
             parameters = {
                     @Parameter(name = "segment_value", value = "MenuItemImpl"),
                     @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuItemImpl")
@@ -335,7 +336,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
             public static final int ALT_TEXT = 5000;
             public static final int LINKED_MENU = 6000;
             public static final int LINKED_PAGE = 7000;
-            public static final int CATEGORY =8000;
+            public static final int CATEGORY = 8000;
             public static final int PRODUCT = 9000;
             public static final int CUSTOM_HTML = 10000;
         }
