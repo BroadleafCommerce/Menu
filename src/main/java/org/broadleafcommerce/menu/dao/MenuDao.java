@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -19,22 +19,23 @@ package org.broadleafcommerce.menu.dao;
 
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuItem;
+
 import java.util.List;
 
 public interface MenuDao {
 
-    public List<Menu> readAllMenus();
+    List<Menu> readAllMenus();
 
-    public List<MenuItem> readAllMenuItems();
+    List<MenuItem> readAllMenuItems();
 
-    public Menu readMenuById(Long menuId);
+    Menu readMenuById(Long menuId);
 
-    public MenuItem readMenuItemById(Long menuItemId);
+    MenuItem readMenuItemById(Long menuItemId);
 
-    public Menu readMenuByName(String menuName);
+    Menu readMenuByName(String menuName);
 
-    public Menu saveMenu(Menu menu);
+    Menu saveMenu(Menu menu);
 
-    public MenuItem saveMenuItem(MenuItem menuItem);
+    MenuItem saveMenuItem(MenuItem menuItem);
 
 }

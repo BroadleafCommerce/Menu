@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -26,46 +26,49 @@ import jakarta.annotation.Nonnull;
 
 /**
  * Represents a menu, typically to drive the display of navigation on a website.
- *  
- * @author bpolster
  *
+ * @author bpolster
  */
 public interface Menu extends Serializable, MultiTenantCloneable<Menu> {
 
     /**
      * Internal id of the menu.
+     *
      * @return
      */
-    public Long getId();
+    Long getId();
 
     /**
      * Sets the id of the menu.
+     *
      * @param id
      */
-    public void setId(Long id);
+    void setId(Long id);
 
     /**
      * Returns the name of the menu.
+     *
      * @return
      */
-    public String getName();
+    String getName();
 
     /**
      * Sets the name of the menu.
+     *
      * @param name
      */
-    public void setName(String name);
+    void setName(String name);
 
     /**
-     * Returns the list of associated {@link MenuItem}s 
-     * 
+     * Returns the list of associated {@link MenuItem}s
+     *
      * @return the featured products
      */
-    public List<MenuItem> getMenuItems();
+    List<MenuItem> getMenuItems();
 
     /**
-     * Sets the list of associated {@link MenuItem}s 
+     * Sets the list of associated {@link MenuItem}s
      */
-    public void setMenuItems(@Nonnull List<MenuItem> menuItems);
+    void setMenuItems(@Nonnull List<MenuItem> menuItems);
 
 }

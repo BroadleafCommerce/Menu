@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -120,7 +120,7 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     public DynamicResultSet inspect(PersistencePackage persistencePackage, DynamicEntityDao dynamicEntityDao, InspectHelper helper) throws ServiceException {
         try {
             PersistencePerspective persistencePerspective = persistencePackage.getPersistencePerspective();
-            Map<MergedPropertyType, Map<String, FieldMetadata>> allMergedProperties = new HashMap<MergedPropertyType, Map<String, FieldMetadata>>();
+            Map<MergedPropertyType, Map<String, FieldMetadata>> allMergedProperties = new HashMap<>();
 
             //retrieve the default properties for Menu Item
             Map<String, FieldMetadata> properties = helper.getSimpleMergedProperties(MenuItem.class.getName(), persistencePerspective);
@@ -160,7 +160,12 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
     }
 
     @Override
-    public DynamicResultSet fetch(PersistencePackage persistencePackage, CriteriaTransferObject cto, DynamicEntityDao dynamicEntityDao, RecordHelper helper) throws ServiceException {
+    public DynamicResultSet fetch(
+            PersistencePackage persistencePackage,
+            CriteriaTransferObject cto,
+            DynamicEntityDao dynamicEntityDao,
+            RecordHelper helper
+    ) throws ServiceException {
         if (isSelectingLinkedMenu(persistencePackage)) {
             FilterMapping defaultCategoryMapping = createFilterMappingForProperty(ID_PROPERTY, new PredicateProvider() {
                 @Override
@@ -311,8 +316,8 @@ public class MenuItemCustomPersistenceHandler extends CustomPersistenceHandlerAd
         this.validateLinkedMenu(entity, linkedMenu, parentMenu.getId(), menuLinks);
     }
 
-    private void validateLinkedMenu(final Entity entity, final Menu linkedMenu, final Long id,
-                                    final StringBuilder menuLinks) throws ValidationException {
+    protected void validateLinkedMenu(final Entity entity, final Menu linkedMenu, final Long id,
+                                      final StringBuilder menuLinks) throws ValidationException {
         if (linkedMenu != null) {
             for (MenuItem menuItem : linkedMenu.getMenuItems()) {
                 if ((MenuItemType.SUBMENU.equals(menuItem.getMenuItemType()))) {
