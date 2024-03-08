@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -20,10 +20,8 @@ package org.broadleafcommerce.menu.processor;
 import org.broadleafcommerce.common.extension.ExtensionHandler;
 import org.broadleafcommerce.common.extension.ExtensionResultStatusType;
 import org.broadleafcommerce.menu.dto.MenuItemDTO;
-import org.broadleafcommerce.presentation.model.BroadleafTemplateContext;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Elbert Bautista (elbertbautista)
@@ -35,6 +33,6 @@ public interface MenuProcessorExtensionHandler extends ExtensionHandler {
      *
      * @return - ExtensionResultStatusType
      */
-    public ExtensionResultStatusType addAdditionalFieldsToModel(List<MenuItemDTO> menuItemDTOList, String menuName);
+    ExtensionResultStatusType addAdditionalFieldsToModel(List<MenuItemDTO> menuItemDTOList, String menuName);
 
 }

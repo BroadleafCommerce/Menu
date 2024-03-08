@@ -37,6 +37,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,7 @@ import jakarta.persistence.Table;
 })
 public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     static {
@@ -97,7 +99,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "blCMSElements")
     @BatchSize(size = 50)
     @OrderBy(value = "sequence")
-    protected List<MenuItem> menuItems = new ArrayList<MenuItem>(20);
+    protected List<MenuItem> menuItems = new ArrayList<>(20);
 
     @Override
     public Long getId() {
@@ -135,17 +137,16 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     }
 
     public static class Presentation {
-        private Presentation() {
+        protected Presentation() {
         }
 
         public static class FieldOrder {
-            private FieldOrder() {
+            protected FieldOrder() {
             }
 
             // General Fields
             public static final int NAME = 1000;
         }
-
     }
 
     @Override

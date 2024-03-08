@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -38,10 +38,10 @@ import jakarta.annotation.Resource;
 
 @Service("blMenuService")
 public class MenuServiceImpl implements MenuService {
-    
+
     @Resource(name = "blMenuDao")
     protected MenuDao menuDao;
-    
+
     @Resource(name = "blCatalogService")
     protected CatalogService catalogService;
 
@@ -49,7 +49,7 @@ public class MenuServiceImpl implements MenuService {
     public Menu findMenuById(Long id) {
         return menuDao.readMenuById(id);
     }
-    
+
     @Override
     public Menu findMenuByName(String menuName) {
         return menuDao.readMenuByName(menuName);
@@ -62,7 +62,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuItemDTO> constructMenuItemDTOsForMenu(Menu menu) {
-        List<MenuItemDTO> dtos = new ArrayList<MenuItemDTO>();
+        List<MenuItemDTO> dtos = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(menu.getMenuItems())) {
             for (MenuItem menuItem : menu.getMenuItems()) {
                 MenuItemDTO menuItemDTO = convertMenuItemToDTO(menuItem);
@@ -83,7 +83,7 @@ public class MenuServiceImpl implements MenuService {
             dto.setUrl(menuItem.getDerivedUrl());
             dto.setLabel(menuItem.getDerivedLabel());
 
-            List<MenuItemDTO> submenu = new ArrayList<MenuItemDTO>();
+            List<MenuItemDTO> submenu = new ArrayList<>();
             List<MenuItem> items = menuItem.getLinkedMenu().getMenuItems();
             if (CollectionUtils.isNotEmpty(items)) {
                 for (MenuItem item : items) {
@@ -108,31 +108,30 @@ public class MenuServiceImpl implements MenuService {
         } else {
             return createDto(menuItem);
         }
-
     }
-    
+
     protected MenuItemDTO convertCategoryToMenuItemDTO(final Category category) {
         Set<Category> convertedCategories = new HashSet<>();
         return convertCategoryToMenuItemDTO(category, convertedCategories);
     }
-    
+
     protected MenuItemDTO convertCategoryToMenuItemDTO(final Category category, Set<Category> convertedCategories) {
         MenuItemDTO dto = createDto(category);
         List<CategoryXref> childXrefs = ListUtils.emptyIfNull(category.getChildCategoryXrefs());
         List<MenuItemDTO> submenu = new ArrayList<>();
 
         convertedCategories.add(category);
-        
+
         for (CategoryXref childXref : childXrefs) {
             final Category childCategory = childXref.getSubCategory();
-            
+
             if (!convertedCategories.contains(childCategory)) {
                 submenu.add(convertCategoryToMenuItemDTO(childCategory, convertedCategories));
             }
         }
-        
+
         dto.setSubmenu(submenu);
-        
+
         return dto;
     }
 
@@ -146,13 +145,13 @@ public class MenuServiceImpl implements MenuService {
         }
         return dto;
     }
-    
+
     protected MenuItemDTO createDto(Category category) {
         MenuItemDTO dto = new MenuItemDTO();
         dto.setLabel(category.getName());
         dto.setUrl(category.getUrl());
         dto.setCategoryId(category.getId());
-        
+
         return dto;
     }
 }

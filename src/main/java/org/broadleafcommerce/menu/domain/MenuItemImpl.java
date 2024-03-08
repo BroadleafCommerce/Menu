@@ -44,6 +44,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import java.io.Serial;
 import java.math.BigDecimal;
 
 import jakarta.persistence.CascadeType;
@@ -81,6 +82,7 @@ import jakarta.persistence.Table;
 })
 public class MenuItemImpl implements MenuItem, ProfileEntity {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -229,7 +231,6 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
         this.parentMenu = parentMenu;
     }
 
-
     @Override
     public Menu getLinkedMenu() {
         return linkedMenu;
@@ -321,11 +322,11 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     }
 
     public static class Presentation {
-        private Presentation() {
+        protected Presentation() {
         }
 
         public static class FieldOrder {
-            private FieldOrder() {
+            protected FieldOrder() {
             }
 
             // General Fields

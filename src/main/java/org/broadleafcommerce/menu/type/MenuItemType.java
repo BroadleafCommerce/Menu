@@ -10,7 +10,7 @@
  * the Broadleaf End User License Agreement (EULA), Version 1.1
  * (the "Commercial License" located at http://license.broadleafcommerce.org/commercial_license-1.1.txt)
  * shall apply.
- * 
+ *
  * Alternatively, the Commercial License may be replaced with a mutually agreed upon license (the "Custom License")
  * between you and Broadleaf Commerce. You may not use this file except in compliance with the applicable license.
  * #L%
@@ -19,22 +19,22 @@ package org.broadleafcommerce.menu.type;
 
 import org.broadleafcommerce.common.BroadleafEnumerationType;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * Menu Item Types
  *
  * @author bpolster
- *
  */
 public class MenuItemType implements BroadleafEnumerationType, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
-    private static final Map<String, MenuItemType> TYPES = new HashMap<String, MenuItemType>();
+    private static final Map<String, MenuItemType> TYPES = new HashMap<>();
 
     public static final MenuItemType LINK = new MenuItemType("LINK", "Link");
     public static final MenuItemType CATEGORY = new MenuItemType("CATEGORY", "Category");
@@ -42,7 +42,6 @@ public class MenuItemType implements BroadleafEnumerationType, Serializable {
     public static final MenuItemType SUBMENU = new MenuItemType("SUBMENU", "Sub Menu");
     public static final MenuItemType PRODUCT = new MenuItemType("PRODUCT", "Product");
     public static final MenuItemType CUSTOM = new MenuItemType("CUSTOM", "Custom");
-
 
     public static MenuItemType getInstance(final String type) {
         return TYPES.get(type);
@@ -70,7 +69,7 @@ public class MenuItemType implements BroadleafEnumerationType, Serializable {
         return friendlyType;
     }
 
-    private void setType(final String type) {
+    protected void setType(final String type) {
         this.type = type;
         if (!TYPES.containsKey(type)) {
             TYPES.put(type, this);
