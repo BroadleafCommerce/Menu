@@ -22,9 +22,11 @@ import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuImpl;
 import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.domain.MenuItemImpl;
-import org.hibernate.ejb.QueryHints;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

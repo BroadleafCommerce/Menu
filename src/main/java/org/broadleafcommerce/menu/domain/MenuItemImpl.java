@@ -153,7 +153,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     protected Page linkedPage;
 
     @Lob
-    @Type(type = "org.hibernate.type.StringClobType")
+    @Type(type = "org.hibernate.type.MaterializedClobType")
     @Column(name = "CUSTOM_HTML", length = Integer.MAX_VALUE - 1)
     @AdminPresentation(friendlyName = "MenuItemImpl_CustomHtml", order = Presentation.FieldOrder.CUSTOM_HTML,
             largeEntry = true,

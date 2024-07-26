@@ -19,6 +19,7 @@ package org.broadleafcommerce.menu.dao;
 
 import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuItem;
+
 import java.util.List;
 
 public interface MenuDao {
