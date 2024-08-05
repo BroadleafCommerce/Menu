@@ -4,14 +4,16 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>1.0.10-GA</version>
+        <version>1.0.10-OAP-JAVA11-SNAPSHOT</version>
     </parent>
 
+    <name>BroadleafCommerce Menu</name>
+    <description>BroadleafCommerce Menu Module</description>
     <groupId>org.broadleafcommerce</groupId>
     <artifactId>broadleaf-menu</artifactId>
-    <name>BroadleafCommerce Menu</name>
-    <description>BroadleafCommerce Menu</description>
-    <version>2.0.1-GA</version>
+    <version>2.0.1-OAP-JAVA11-SNAPSHOT-SNAPSHOT</version>
+    <url>https://www.broadleafcommerce.com</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <blc.version>5.0.0-GA</blc.version>
@@ -22,10 +24,8 @@
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
         <developerConnection>scm:git:git@github.com:BroadleafCommerce/Menu.git</developerConnection>
         <url>https://github.com/BroadleafCommerce/BroadleafCommerce</url>
-      <tag>broadleaf-menu-2.0.1-GA</tag>
+        <tag>HEAD</tag>
     </scm>
-
-    <url>http://www.broadleafcommerce.com</url>
     <licenses>
         <license>
             <name>Broadleaf Fair Use 1.0</name>
@@ -33,34 +33,39 @@
             <distribution>repo</distribution>
             <comments>Fair Use Community License</comments>
         </license>
-        <license>
-            <name>Broadleaf End User License Agreement 1.1</name>
-            <url>http://license.broadleafcommerce.org/commercial_license-1.1.txt</url>
-            <distribution>repo</distribution>
-            <comments>Commercial License Applicable When Bounds of Fair Use License Are Exceeded</comments>
-        </license>
     </licenses>
     <developers>
         <developer>
-            <id>architect</id>
-            <email>architect@broadleafcommerce.org</email>
+            <id>blcteam</id>
+            <name>Broadleaf Commerce Team</name>
+            <email>info@broadleafcommerce.com</email>
             <organization>Broadleaf Commerce</organization>
-            <organizationUrl>http://www.broadleafcommerce.org</organizationUrl>
+            <organizationUrl>https://www.broadleafcommerce.com</organizationUrl>
             <timezone>-6</timezone>
         </developer>
     </developers>
     <repositories>
         <repository>
-            <id>public releases</id>
+            <id>releases</id>
             <name>public releases</name>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/releases</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/groups/community-releases/</url>
         </repository>
         <repository>
-            <id>public snapshots</id>
+            <id>snapshots</id>
             <name>public snapshots</name>
-            <url>http://www.broadleafcommerce.org/nexus/content/repositories/snapshots/</url>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/groups/community-snapshots/</url>
         </repository>
     </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>releases</id>
+            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
+        </repository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
@@ -81,16 +86,6 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>releases</id>
-            <url>http://nexus.broadleafcommerce.org/nexus/content/repositories/menu-releases/</url>
-        </repository>
-    </distributionManagement>
     <profiles>
         <profile>
             <id>sources</id>
