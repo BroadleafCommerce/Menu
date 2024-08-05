@@ -22,8 +22,6 @@ import org.broadleafcommerce.common.copy.MultiTenantCloneable;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 /**
  * Represents a menu, typically to drive the display of navigation on a website.
  *  
@@ -66,6 +64,6 @@ public interface Menu extends Serializable, MultiTenantCloneable<Menu> {
     /**
      * Sets the list of associated {@link MenuItem}s 
      */
-    public void setMenuItems(@Nonnull List<MenuItem> menuItems);
+    public void setMenuItems(List<MenuItem> menuItems);
 
 }

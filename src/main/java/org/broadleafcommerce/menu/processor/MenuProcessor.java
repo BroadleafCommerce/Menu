@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.Arguments;
 import org.thymeleaf.dom.Element;
 
-
 import javax.annotation.Resource;
 
 /**
@@ -75,6 +74,6 @@ public class MenuProcessor extends AbstractModelVariableModifierProcessor {
             addToModel(arguments, resultVar, menuService.constructMenuItemDTOsForMenu(menu));
             extensionManager.getProxy().addAdditionalFieldsToModel(arguments, element);
         }
-
     }
+
 }
