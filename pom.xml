@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.broadleafcommerce</groupId>
         <artifactId>broadleaf-module-parent</artifactId>
-        <version>1.0.11-OAP-JAVA17-SNAPSHOT</version>
+        <version>1.0.11-OAP-JAVA17-M1</version>
     </parent>
 
     <name>BroadleafCommerce Menu</name>
@@ -17,7 +17,7 @@
     <properties>
         <project.uri>${project.baseUri}</project.uri>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <blc.version>5.0.9.3-OAP-JAVA17-SNAPSHOT</blc.version>
+        <blc.version>5.0.9.3-OAP-JAVA17-M1</blc.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
