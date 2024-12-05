@@ -16,6 +16,7 @@ different types: "Link", "Category", "Page", "Submenu", "Product", or "Custom"
 |   3.0.0-GA   |     6.1.0-GA      |
 |   3.3.0-GA   |     6.2.0-GA      |
 |   4.0.0-GA   |     7.0.0-GA      |
+|   4.1.0-GA   |     7.1.0-GA      |
 
 ## Module Installation
 
