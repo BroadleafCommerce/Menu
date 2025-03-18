@@ -42,6 +42,7 @@ import org.hibernate.Length;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.Parameter;
 
 import java.io.Serial;
@@ -58,6 +59,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.hibernate.type.descriptor.jdbc.LongVarcharJdbcType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -154,6 +156,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     protected Page linkedPage;
 
     @Lob
+    @JdbcType(LongVarcharJdbcType.class)
     @Column(name = "CUSTOM_HTML", length = Length.LONG32 - 1)
     @AdminPresentation(friendlyName = "MenuItemImpl_CustomHtml", order = Presentation.FieldOrder.CUSTOM_HTML,
             largeEntry = true,
