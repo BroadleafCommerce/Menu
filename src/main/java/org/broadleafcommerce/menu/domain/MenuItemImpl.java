@@ -26,7 +26,6 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMe
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
-import org.broadleafcommerce.common.persistence.IdOverrideTableGenerator;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
@@ -38,12 +37,11 @@ import org.broadleafcommerce.common.presentation.override.AdminPresentationMerge
 import org.broadleafcommerce.common.presentation.override.AdminPresentationMergeOverrides;
 import org.broadleafcommerce.common.presentation.override.PropertyType;
 import org.broadleafcommerce.menu.type.MenuItemType;
-import org.hibernate.Length;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -59,7 +57,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import org.hibernate.type.descriptor.jdbc.LongVarcharJdbcType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -91,7 +88,7 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     @GeneratedValue(generator = "MenuItemId")
     @GenericGenerator(
             name = "MenuItemId",
-            type = IdOverrideTableGenerator.class,
+            strategy = "org.broadleafcommerce.common.persistence.IdOverrideTableGenerator",
             parameters = {
                     @Parameter(name = "segment_value", value = "MenuItemImpl"),
                     @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuItemImpl")
@@ -156,8 +153,8 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     protected Page linkedPage;
 
     @Lob
-    @JdbcType(LongVarcharJdbcType.class)
-    @Column(name = "CUSTOM_HTML", length = Length.LONG32 - 1)
+    @Type(type = "org.hibernate.type.MaterializedClobType")
+    @Column(name = "CUSTOM_HTML", length = Integer.MAX_VALUE - 1)
     @AdminPresentation(friendlyName = "MenuItemImpl_CustomHtml", order = Presentation.FieldOrder.CUSTOM_HTML,
             largeEntry = true,
             fieldType = SupportedFieldType.HTML_BASIC,
