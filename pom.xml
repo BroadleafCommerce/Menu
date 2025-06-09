@@ -24,7 +24,7 @@
         <connection>scm:git:git@github.com:BroadleafCommerce/Menu.git</connection>
         <developerConnection>scm:git:git@github.com:BroadleafCommerce/Menu.git</developerConnection>
         <url>https://github.com/BroadleafCommerce/BroadleafCommerce</url>
-        <tag>HEAD</tag>
+        <tag>broadleaf-menu-4.0.3-HIB-56-M1</tag>
     </scm>
     <licenses>
         <license>
