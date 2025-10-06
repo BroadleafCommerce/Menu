@@ -76,7 +76,7 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     @GeneratedValue(generator = "MenuId")
     @GenericGenerator(
             name = "MenuId",
-            type = IdOverrideTableGenerator.class,
+            strategy = "org.broadleafcommerce.common.persistence.IdOverrideTableGenerator",
             parameters = {
                     @Parameter(name = "segment_value", value = "MenuImpl"),
                     @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuImpl")
