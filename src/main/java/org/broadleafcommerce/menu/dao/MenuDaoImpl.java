@@ -22,7 +22,7 @@ import org.broadleafcommerce.menu.domain.Menu;
 import org.broadleafcommerce.menu.domain.MenuImpl;
 import org.broadleafcommerce.menu.domain.MenuItem;
 import org.broadleafcommerce.menu.domain.MenuItemImpl;
-import org.hibernate.annotations.QueryHints;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -65,8 +65,8 @@ public class MenuDaoImpl implements MenuDao {
     public Menu readMenuByName(String menuName) {
         TypedQuery<Menu> query = em.createNamedQuery("BC_READ_MENU_BY_NAME", Menu.class);
         query.setParameter("menuName", menuName);
-        query.setHint(QueryHints.CACHEABLE, true);
-        query.setHint(QueryHints.CACHE_REGION, "query.Cms");
+        query.setHint(QueryHints.HINT_CACHEABLE, true);
+        query.setHint(QueryHints.HINT_CACHE_REGION, "query.Cms");
 
         List<Menu> results = query.getResultList();
         if (!results.isEmpty()) {
