@@ -17,6 +17,7 @@
  */
 package org.broadleafcommerce.menu.domain;
 
+import org.broadleafcommerce.common.persistence.BroadleafIdGenerator;
 import org.broadleafcommerce.common.admin.domain.AdminMainEntity;
 import org.broadleafcommerce.common.copy.CreateResponse;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
@@ -26,7 +27,6 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTy
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.domain.TranslatedEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
-import org.broadleafcommerce.common.persistence.IdOverrideTableGenerator;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationCollection;
@@ -34,9 +34,6 @@ import org.broadleafcommerce.common.presentation.client.AddMethodType;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,6 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
@@ -73,14 +69,10 @@ public class MenuImpl implements Menu, AdminMainEntity, ProfileEntity {
     }
 
     @Id
-    @GeneratedValue(generator = "MenuId")
-    @GenericGenerator(
-            name = "MenuId",
-            type = IdOverrideTableGenerator.class,
-            parameters = {
-                    @Parameter(name = "segment_value", value = "MenuImpl"),
-                    @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuImpl")
-            })
+    @BroadleafIdGenerator(
+            segmentValue = "MenuImpl",
+            entityName = "org.broadleafcommerce.menu.domain.MenuImpl"
+    )
     @Column(name = "MENU_ID")
     protected Long id;
 
