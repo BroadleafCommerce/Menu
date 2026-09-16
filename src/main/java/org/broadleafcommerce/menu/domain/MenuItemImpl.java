@@ -19,7 +19,6 @@ package org.broadleafcommerce.menu.domain;
 
 import org.broadleafcommerce.cms.page.domain.Page;
 import org.broadleafcommerce.cms.page.domain.PageImpl;
-import org.broadleafcommerce.common.persistence.BroadleafIdGenerator;
 import org.broadleafcommerce.common.copy.CreateResponse;
 import org.broadleafcommerce.common.copy.MultiTenantCopyContext;
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransform;
@@ -27,6 +26,7 @@ import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformMe
 import org.broadleafcommerce.common.extensibility.jpa.copy.DirectCopyTransformTypes;
 import org.broadleafcommerce.common.extensibility.jpa.copy.ProfileEntity;
 import org.broadleafcommerce.common.i18n.service.DynamicTranslationProvider;
+import org.broadleafcommerce.common.persistence.IdOverrideTableGenerator;
 import org.broadleafcommerce.common.presentation.AdminPresentation;
 import org.broadleafcommerce.common.presentation.AdminPresentationClass;
 import org.broadleafcommerce.common.presentation.AdminPresentationToOneLookup;
@@ -41,13 +41,17 @@ import org.broadleafcommerce.menu.type.MenuItemType;
 import org.hibernate.Length;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.Parameter;
+
 import java.io.Serial;
 import java.math.BigDecimal;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -84,10 +88,179 @@ public class MenuItemImpl implements MenuItem, ProfileEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @BroadleafIdGenerator(
-            segmentValue = "MenuItemImpl",
-            entityName = "org.broadleafcommerce.menu.domain.MenuItemImpl"
-    ) {
+    @GeneratedValue(generator = "MenuItemId")
+    @GenericGenerator(
+            name = "MenuItemId",
+            type = IdOverrideTableGenerator.class,
+            parameters = {
+                    @Parameter(name = "segment_value", value = "MenuItemImpl"),
+                    @Parameter(name = "entity_name", value = "org.broadleafcommerce.menu.domain.MenuItemImpl")
+            })
+    @Column(name = "MENU_ITEM_ID")
+    protected Long id;
+
+    @Column(name = "LABEL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Label",
+            order = Presentation.FieldOrder.LABEL,
+            gridOrder = Presentation.FieldOrder.LABEL,
+            prominent = true,
+            translatable = true)
+    protected String label;
+
+    @Column(name = "MENU_ITEM_TYPE")
+    @AdminPresentation(friendlyName = "MenuItemImpl_Type",
+            order = Presentation.FieldOrder.MENU_ITEM_TYPE,
+            prominent = true,
+            gridOrder = Presentation.FieldOrder.MENU_ITEM_TYPE,
+            fieldType = SupportedFieldType.BROADLEAF_ENUMERATION,
+            broadleafEnumeration = "org.broadleafcommerce.menu.type.MenuItemType")
+    protected String type;
+
+    @Column(name = "SEQUENCE", precision = 10, scale = 6)
+    @AdminPresentation(visibility = VisibilityEnum.HIDDEN_ALL)
+    protected BigDecimal sequence;
+
+    @ManyToOne(optional = true, targetEntity = MenuImpl.class, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "PARENT_MENU_ID")
+    @AdminPresentation(excluded = true)
+    protected Menu parentMenu;
+
+    @Column(name = "ACTION_URL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_ActionUrl",
+            order = Presentation.FieldOrder.ACTION_URL)
+    protected String actionUrl;
+
+    @Column(name = "IMAGE_URL")
+    @AdminPresentation(friendlyName = "MenuItemImpl_ImageUrl",
+            order = Presentation.FieldOrder.IMAGE_URL,
+            fieldType = SupportedFieldType.ASSET_LOOKUP)
+    protected String imageUrl;
+
+    @Column(name = "ALT_TEXT")
+    @AdminPresentation(friendlyName = "MenuItemImpl_AltText",
+            order = Presentation.FieldOrder.ALT_TEXT)
+    protected String altText;
+
+    @ManyToOne(targetEntity = MenuImpl.class)
+    @JoinColumn(name = "LINKED_MENU_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_LinkedMenu",
+            order = Presentation.FieldOrder.LINKED_MENU)
+    @AdminPresentationToOneLookup()
+    protected Menu linkedMenu;
+
+    @ManyToOne(targetEntity = PageImpl.class)
+    @JoinColumn(name = "LINKED_PAGE_ID")
+    @AdminPresentation(friendlyName = "MenuItemImpl_LinkedPage",
+            order = Presentation.FieldOrder.LINKED_PAGE)
+    @AdminPresentationToOneLookup()
+    protected Page linkedPage;
+
+    @Lob
+    @JdbcType(LongVarcharJdbcType.class)
+    @Column(name = "CUSTOM_HTML", length = Length.LONG32 - 1)
+    @AdminPresentation(friendlyName = "MenuItemImpl_CustomHtml", order = Presentation.FieldOrder.CUSTOM_HTML,
+            largeEntry = true,
+            fieldType = SupportedFieldType.HTML_BASIC,
+            translatable = true)
+    protected String customHtml;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public MenuItemType getMenuItemType() {
+        return MenuItemType.getInstance(type);
+    }
+
+    @Override
+    public void setMenuItemType(MenuItemType menuItemType) {
+        type = menuItemType.getType();
+    }
+
+    @Override
+    public String getLabel() {
+        return DynamicTranslationProvider.getValue(this, "label", label);
+    }
+
+    @Override
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String getActionUrl() {
+        return actionUrl;
+    }
+
+    @Override
+    public void setActionUrl(String actionUrl) {
+        this.actionUrl = actionUrl;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public BigDecimal getSequence() {
+        return sequence;
+    }
+
+    @Override
+    public void setSequence(BigDecimal sequence) {
+        this.sequence = sequence;
+    }
+
+    @Override
+    public Menu getParentMenu() {
+        return parentMenu;
+    }
+
+    @Override
+    public void setParentMenu(Menu parentMenu) {
+        this.parentMenu = parentMenu;
+    }
+
+    @Override
+    public Menu getLinkedMenu() {
+        return linkedMenu;
+    }
+
+    @Override
+    public void setLinkedMenu(Menu linkedMenu) {
+        this.linkedMenu = linkedMenu;
+    }
+
+    @Override
+    public String getAltText() {
+        return altText;
+    }
+
+    @Override
+    public void setAltText(String altText) {
+        this.altText = altText;
+    }
+
+    @Override
+    public Page getLinkedPage() {
+        return linkedPage;
+    }
+
+    @Override
+    public void setLinkedPage(Page linkedPage) {
         this.linkedPage = linkedPage;
     }
 
